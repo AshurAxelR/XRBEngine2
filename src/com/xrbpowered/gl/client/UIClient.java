@@ -21,7 +21,7 @@ public class UIClient extends Client {
 	public UIClient(String title) {
 		super(title);
 		uiWindow = new ClientWindow(this);
-		uiWindow.getContainer().setBaseScale(uiScale);
+		getContainer().setBaseScale(uiScale);
 	}
 	
 	public ClientWindow getUIWindow() {
@@ -32,13 +32,21 @@ public class UIClient extends Client {
 		return (ClientBaseContainer) uiWindow.getContainer();
 	}
 	
+	public void setupResources() {
+		getContainer().setupResources();
+	}
+
 	@Override
 	public void resizeResources() {
 		PaneShader.getInstance().resize();
 		uiWindow.notifyResized();
-		super.resizeResources();
+		getContainer().resizeResources();
 	}
-	
+
+	public void releaseResources() {
+		getContainer().releaseResources();
+	}
+
 	@Override
 	public void render(float dt) {
 		glClearColor(clearColor.getRed()/255f, clearColor.getGreen()/255f, clearColor.getBlue()/255f, 0.0f);

@@ -1,6 +1,6 @@
 package com.xrbpowered.gl.ui;
 
-import com.xrbpowered.gl.Renderer;
+import com.xrbpowered.gl.client.Renderer;
 import com.xrbpowered.gl.res.buffer.RenderTarget;
 import com.xrbpowered.zoomui.BaseContainer;
 import com.xrbpowered.zoomui.GraphAssist;
@@ -22,6 +22,27 @@ public class ClientBaseContainer extends BaseContainer implements Renderer {
 	@Override
 	public void paint(GraphAssist g) {
 		paintChildren(g);
+	}
+	
+	@Override
+	public void setupResources() {
+		for(UIElement c : children) {
+			((Renderer) c).setupResources();
+		}
+	}
+
+	@Override
+	public void resizeResources() {
+		for(UIElement c : children) {
+			((Renderer) c).resizeResources();
+		}
+	}
+
+	@Override
+	public void releaseResources() {
+		for(UIElement c : children) {
+			((Renderer) c).releaseResources();
+		}
 	}
 	
 	@Override

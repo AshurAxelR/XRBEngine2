@@ -116,16 +116,6 @@ public class GLClientWindow extends UIClient {
 		};
 	}
 	
-	@Override
-	public void setupResources() {
-		root.setupResources();
-	}
-	
-	@Override
-	public void releaseResources() {
-		root.releaseResources();
-	}
-	
 	public static void main(String[] args) {
 		new GLClientWindow().run();
 	}

@@ -1,12 +1,11 @@
 package com.xrbpowered.gl.ui;
 
-import com.xrbpowered.gl.Renderer;
-import com.xrbpowered.gl.ResourceUser;
+import com.xrbpowered.gl.client.Renderer;
 import com.xrbpowered.gl.res.buffer.RenderTarget;
 import com.xrbpowered.zoomui.UIContainer;
 import com.xrbpowered.zoomui.UIElement;
 
-public class UINode extends UIContainer implements Renderer, ResourceUser {
+public class UINode extends UIContainer implements Renderer {
 
 	public UINode(UIContainer parent) {
 		super(parent);
@@ -15,21 +14,21 @@ public class UINode extends UIContainer implements Renderer, ResourceUser {
 	@Override
 	public void setupResources() {
 		for(UIElement c : children) {
-			((ResourceUser) c).setupResources();
+			((Renderer) c).setupResources();
 		}
 	}
 
 	@Override
 	public void resizeResources() {
 		for(UIElement c : children) {
-			((ResourceUser) c).resizeResources();
+			((Renderer) c).resizeResources();
 		}
 	}
 
 	@Override
 	public void releaseResources() {
 		for(UIElement c : children) {
-			((ResourceUser) c).releaseResources();
+			((Renderer) c).releaseResources();
 		}
 	}
 
