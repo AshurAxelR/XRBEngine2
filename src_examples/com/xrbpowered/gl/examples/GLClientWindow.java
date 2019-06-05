@@ -2,6 +2,7 @@ package com.xrbpowered.gl.examples;
 
 import java.awt.Color;
 
+import org.joml.Matrix4f;
 import org.joml.Vector3f;
 
 import com.xrbpowered.gl.client.UIClient;
@@ -12,7 +13,6 @@ import com.xrbpowered.gl.res.mesh.ObjMeshLoader;
 import com.xrbpowered.gl.res.mesh.StaticMesh;
 import com.xrbpowered.gl.res.texture.Texture;
 import com.xrbpowered.gl.scene.CameraActor;
-import com.xrbpowered.gl.scene.Projection;
 import com.xrbpowered.gl.scene.StaticMeshActor;
 import com.xrbpowered.gl.ui.UINode;
 import com.xrbpowered.gl.ui.common.UIFpsOverlay;
@@ -70,7 +70,7 @@ public class GLClientWindow extends UIClient {
 			@Override
 			public void setSize(float width, float height) {
 				super.setSize(width, height);
-				camera.setProjection(Projection.perspective(70f, getWidth()/getHeight(), 0.1f, 100.0f));
+				camera.setProjection(new Matrix4f().setPerspectiveLH((float) Math.toRadians(70f), getWidth()/getHeight(), 0.1f, 100.0f));
 				camera.updateTransform();
 			}
 			
@@ -78,7 +78,7 @@ public class GLClientWindow extends UIClient {
 			public void setupResources() {
 				clearColor = new Color(0x777777);
 				camera = new CameraActor();
-				camera.position = new Vector3f(0, 0, 3);
+				camera.position = new Vector3f(0, 0, -3);
 				camera.updateTransform();
 				
 				shader = StandardShader.getInstance();
@@ -94,7 +94,7 @@ public class GLClientWindow extends UIClient {
 				if(mesh==null)
 					throw new RuntimeException("Cannot load mesh");
 				meshActor = StaticMeshActor.make(mesh, shader, texture);
-				meshActor.position = new Vector3f(0, 0, -2);
+				meshActor.position = new Vector3f(0, 0, 2);
 				meshActor.updateTransform();
 				
 				super.setupResources();
