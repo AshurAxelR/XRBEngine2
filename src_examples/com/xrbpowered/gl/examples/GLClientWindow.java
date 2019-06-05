@@ -13,20 +13,19 @@ import com.xrbpowered.gl.res.mesh.ObjMeshLoader;
 import com.xrbpowered.gl.res.mesh.StaticMesh;
 import com.xrbpowered.gl.res.texture.Texture;
 import com.xrbpowered.gl.scene.CameraActor;
+import com.xrbpowered.gl.scene.Controller;
 import com.xrbpowered.gl.scene.StaticMeshActor;
 import com.xrbpowered.gl.ui.UINode;
 import com.xrbpowered.gl.ui.common.UIFpsOverlay;
 import com.xrbpowered.gl.ui.pane.UIOffscreen;
-import com.xrbpowered.gl.ui.pane.UIPane;
 import com.xrbpowered.zoomui.GraphAssist;
-import com.xrbpowered.zoomui.std.file.UIFileBrowser;
 
 public class GLClientWindow extends UIClient {
 
 	private UINode root;
 	//private UITexture checker;
 	private UIOffscreen render;
-	private UINode files;
+	//private UINode files;
 	
 	public GLClientWindow() {
 		super("GLFW Window");
@@ -36,10 +35,12 @@ public class GLClientWindow extends UIClient {
 		root = new UINode(getContainer()) {
 			@Override
 			public void layout() {
-				files.setLocation(0, 0);
+				/*files.setLocation(0, 0);
 				files.setSize(getWidth()/2, getHeight());
 				render.setLocation(getWidth()/2, 0);
-				render.setSize(getWidth()/2, getHeight());
+				render.setSize(getWidth()/2, getHeight());*/
+				render.setLocation(0, 0);
+				render.setSize(getWidth(), getHeight());
 				super.layout();
 			}
 		};
@@ -50,14 +51,14 @@ public class GLClientWindow extends UIClient {
 				setTexture(new Texture("checker.png"), 0.5f);
 			}
 		};*/
-		files = new UIPane(root, true) {
+		/*files = new UIPane(root, true) {
 			@Override
 			public void layout() {
 				fitChildren();
 				super.layout();
 			}
 		};
-		new UIFileBrowser(files, null);
+		new UIFileBrowser(files, null);*/
 		
 		render = new UIOffscreen(root) {
 			private StandardShader shader;
@@ -65,7 +66,8 @@ public class GLClientWindow extends UIClient {
 			private StaticMesh mesh;
 			private CameraActor camera = null; 
 			private StaticMeshActor meshActor;
-			private float r = 0;
+			//private float r = 0;
+			private Controller controller;
 			
 			@Override
 			public void setSize(float width, float height) {
@@ -80,6 +82,8 @@ public class GLClientWindow extends UIClient {
 				camera = new CameraActor();
 				camera.position = new Vector3f(0, 0, -3);
 				camera.updateTransform();
+				controller = new Controller(input).setLookController(true).setActor(camera);
+				controller.setMouseLook(true);
 				
 				shader = StandardShader.getInstance();
 				shader.ambientColor.set(0.5f, 0.5f, 0.5f, 1f);
@@ -102,11 +106,12 @@ public class GLClientWindow extends UIClient {
 			
 			@Override
 			public void updateTime(float dt) {
-				meshActor.rotation.x = r;
+				/*meshActor.rotation.x = r;
 				meshActor.rotation.y = r*0.3f;
 				meshActor.rotation.z = r*0.1f;
 				meshActor.updateTransform();
-				r += dt;
+				r += dt;*/
+				controller.update(dt);
 				super.updateTime(dt);
 			}
 			

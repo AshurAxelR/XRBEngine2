@@ -17,7 +17,7 @@ import com.xrbpowered.zoomui.UIElement;
 public class ClientInput {
 
 	public final Client client;
-	private long window;
+	public long window; // FIXME getter
 	
 	private float mouseX, mouseY;
 	private HashSet<Integer> pressedMouseButtons = new HashSet<>();
@@ -127,7 +127,7 @@ public class ClientInput {
 	}
 	
 	public boolean isMouseDown(Integer button) {
-		return pressedMouseButtons.contains(button);
+		return button!=null && pressedMouseButtons.contains(button);
 	}
 	
 	public int getKeyMods() {
@@ -147,7 +147,7 @@ public class ClientInput {
 	}
 	
 	public boolean isKeyDown(Integer code) {
-		return pressedKeys.contains(code);
+		return code!=null && pressedKeys.contains(code);
 	}
 
 
