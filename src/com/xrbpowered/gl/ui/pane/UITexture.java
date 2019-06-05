@@ -17,11 +17,16 @@ public class UITexture extends UINode {
 		super(parent);
 	}
 
-	public UITexture setTexture(Texture texture, float scale) {
+	protected UITexture setTexture(Texture texture, float scale, boolean resize) {
 		pane.setTexture(texture);
 		pane.resizeToTexture(scale);
-		super.setSize(pane.width, pane.height);
+		if(resize)
+			super.setSize(pane.width, pane.height);
 		return this;
+	} 
+	
+	public UITexture setTexture(Texture texture, float scale) {
+		return setTexture(texture, 1f, true);
 	}
 
 	public UITexture setTexture(Texture texture) {

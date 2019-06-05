@@ -34,6 +34,10 @@ public class Client {
 	
 	private static int frameWidth, frameHeight;
 	
+	private int frames = 0;
+	private float fpsTime = 0;
+	private float fps = 0f;
+	
 	private GLFWWindowSizeCallbackI windowSizeCallback = new GLFWWindowSizeCallbackI() {
 		@Override
 		public void invoke(long window, int width, int height) {
@@ -56,16 +60,23 @@ public class Client {
 	public void run() {
 		createWindow();
 		
-		double t0 = glfwGetTime();
+		float t0 = (float) glfwGetTime();
+		fpsTime = t0;
 		while(!glfwWindowShouldClose(window)) {
 			input.pollEvents();
 			// TODO process window operations (e.g. switch fullscreen)
 			
-			double t = glfwGetTime();
-			double dt = t-t0;
-			if(dt>0.0)
-				glfwSetWindowTitle(window, String.format("%.1f FPS", 1.0/(t-t0)));
-			render((float)dt);
+			float t = (float) glfwGetTime();
+			float dt = t-t0;
+			
+			if(t-fpsTime>0.5) {
+				fps = frames / (t-fpsTime);
+				frames = 0;
+				fpsTime = t;
+			}
+			frames++;
+			
+			render(dt);
 
 			glfwSwapBuffers(window);
 			t0 = t;
@@ -76,8 +87,12 @@ public class Client {
 		glfwSetErrorCallback(null).free();
 	}
 	
+	public boolean hasContext() {
+		return window!=NULL;
+	}
+	
 	public void createWindow() {
-		if(window!=NULL)
+		if(hasContext())
 			destroyWindow();
 		
 		glfwDefaultWindowHints();
@@ -163,6 +178,10 @@ public class Client {
 	}
 	
 	public void mouseScroll(float x, float y, float delta) {
+	}
+	
+	public float getFps() {
+		return fps;
 	}
 	
 }

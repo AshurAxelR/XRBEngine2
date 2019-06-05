@@ -5,6 +5,7 @@ import java.awt.RenderingHints;
 
 import com.xrbpowered.gl.res.buffer.RenderTarget;
 import com.xrbpowered.gl.res.texture.BufferTexture;
+import com.xrbpowered.gl.ui.ClientWindow;
 import com.xrbpowered.zoomui.GraphAssist;
 import com.xrbpowered.zoomui.UIContainer;
 import com.xrbpowered.zoomui.UIElement;
@@ -18,14 +19,23 @@ public class UIPane extends UITexture {
 		this.opaque = opaque;
 	}
 	
+	private BufferTexture createBuffer() {
+		if(!((ClientWindow) getBase().getWindow()).client.hasContext())
+			return null;
+		float pix = getPixelScale();
+		int w = (int)(getWidth()/pix);
+		int h = (int)(getHeight()/pix);
+		BufferTexture texture = new BufferTexture(w, h, opaque, false, false);
+		setTexture(texture, 1f, false);
+		return texture;
+	}
+	
 	@Override
 	public void setSize(float width, float height) {
 		if(width==getWidth() && height==getHeight())
 			return;
-		float pix = getPixelScale();
-		BufferTexture texture = new BufferTexture((int)(width/pix), (int)(height/pix), true, false, false);
-		setTexture(texture);
 		super.setSize(width, height);
+		createBuffer();
 	}
 	
 	@Override
@@ -34,8 +44,10 @@ public class UIPane extends UITexture {
 	
 	@Override
 	public void paint(GraphAssist g) {
-		updatePaneBounds(g);
 		BufferTexture texture = (BufferTexture) pane.getTexture();
+		if(texture==null)
+			texture = createBuffer();
+		updatePaneBounds(g);
 		
 		GraphAssist gBuff = new GraphAssist(texture.startUpdate());
 		gBuff.graph.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);

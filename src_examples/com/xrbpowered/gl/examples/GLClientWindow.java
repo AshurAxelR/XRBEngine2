@@ -15,8 +15,10 @@ import com.xrbpowered.gl.scene.CameraActor;
 import com.xrbpowered.gl.scene.Projection;
 import com.xrbpowered.gl.scene.StaticMeshActor;
 import com.xrbpowered.gl.ui.UINode;
+import com.xrbpowered.gl.ui.common.UIFpsOverlay;
 import com.xrbpowered.gl.ui.pane.UIOffscreen;
 import com.xrbpowered.gl.ui.pane.UIPane;
+import com.xrbpowered.zoomui.GraphAssist;
 import com.xrbpowered.zoomui.std.file.UIFileBrowser;
 
 public class GLClientWindow extends UIClient {
@@ -41,6 +43,7 @@ public class GLClientWindow extends UIClient {
 				super.layout();
 			}
 		};
+		new UIFpsOverlay(this).setPaneSize(120, 20).setAnchor(GraphAssist.RIGHT, GraphAssist.BOTTOM, 10f);
 		/*checker = new UITexture(root) {
 			@Override
 			public void setupResources() {
