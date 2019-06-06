@@ -11,6 +11,7 @@ import java.nio.IntBuffer;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
 import org.lwjgl.glfw.GLFWVidMode;
+import org.lwjgl.glfw.GLFWWindowCloseCallbackI;
 import org.lwjgl.glfw.GLFWWindowSizeCallbackI;
 import org.lwjgl.opengl.GL;
 import org.lwjgl.system.MemoryStack;
@@ -61,6 +62,14 @@ public class Client {
 			glViewport(0, 0, frameWidth, frameHeight);
 			if(hasResources())
 				resizeResources();
+		}
+	};
+	
+	private GLFWWindowCloseCallbackI windowCloseCallback = new GLFWWindowCloseCallbackI() {
+		@Override
+		public void invoke(long window) {
+			if(!confirmClosing())
+				glfwSetWindowShouldClose(window, false);
 		}
 	};
 	
@@ -160,7 +169,9 @@ public class Client {
 		GL.createCapabilities();
 
 		glfwSetWindowSizeCallback(window, windowSizeCallback);
+		glfwSetWindowCloseCallback(window, windowCloseCallback);
 		input.registerCallbacks(window);
+		
 		centerWindow();
 		glfwShowWindow(window);
 		
@@ -234,6 +245,24 @@ public class Client {
 	 */
 	public static int getHeight() {
 		return frameHeight;
+	}
+	
+	/**
+	 * Command application window to be closed in the next event cycle. 
+	 */
+	public void requestExit() {
+		glfwSetWindowShouldClose(window, true);
+	}
+	
+
+	/**
+	 * The method is called when the user attempts to close the window.
+	 * Override this method to return <code>false</code> to prevent closing at this time.
+	 * This method is not called from {@link #requestExit()}. 
+	 * @return <code>true</code> to close the window.
+	 */
+	public boolean confirmClosing() {
+		return true;
 	}
 	
 	/**

@@ -2,6 +2,8 @@ package com.xrbpowered.gl.examples;
 
 import static org.lwjgl.opengl.GL11.*;
 
+import java.awt.event.KeyEvent;
+
 import org.joml.Vector3f;
 
 import com.xrbpowered.gl.client.Client;
@@ -39,17 +41,13 @@ public class GLSimple extends Client {
 		controller.setMouseLook(true);
 		
 		shader = StandardShader.getInstance();
-		shader.ambientColor.set(0.5f, 0.5f, 0.5f, 1f);
-		shader.lightColor.set(0.5f, 0.5f, 0.5f, 1f);
-		shader.lightDir.set(0, 0, -1).normalize();
 		
 		texture = new Texture("checker.png", true, true);
 		//texture = new Texture(new Color(0xffddbb));
 
 		//mesh = FastMeshBuilder.cube(1f, StandardShader.standardVertexInfo, null);
 		mesh = ObjMeshLoader.loadObj("test.obj", 0, 1f, StandardShader.standardVertexInfo, null);
-		if(mesh==null)
-			throw new RuntimeException("Cannot load mesh");
+
 		meshActor = StaticMeshActor.make(mesh, shader, texture);
 		meshActor.position = new Vector3f(0, 0, -2);
 		meshActor.updateTransform();
@@ -58,9 +56,14 @@ public class GLSimple extends Client {
 	}
 	
 	@Override
+	public void keyPressed(char c, int code) {
+		if(code==KeyEvent.VK_ESCAPE)
+			requestExit();
+	}
+	
+	@Override
 	public void resizeResources() {
-		if(camera!=null)
-			camera.setAspectRatio(getWidth(), getHeight());
+		camera.setAspectRatio(getWidth(), getHeight());
 	}
 	
 	@Override

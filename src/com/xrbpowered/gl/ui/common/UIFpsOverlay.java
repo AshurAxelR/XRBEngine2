@@ -61,7 +61,7 @@ public class UIFpsOverlay extends UINode {
 	private void updateLocation() {
 		pane.setLocation(
 				GraphAssist.align(getWidth()-pane.getWidth()-margin*2f, halign)+margin,
-				GraphAssist.align(getHeight()-pane.getHeight()-margin*2f, halign)+margin
+				GraphAssist.align(getHeight()-pane.getHeight()-margin*2f, valign)+margin
 			);
 	}
 
