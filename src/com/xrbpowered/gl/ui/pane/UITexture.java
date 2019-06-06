@@ -17,21 +17,10 @@ public class UITexture extends UINode {
 		super(parent);
 	}
 
-	protected UITexture setTexture(Texture texture, float scale, boolean resize) {
+	protected UITexture setTexture(Texture texture) {
 		pane.setTexture(texture);
-		pane.resizeToTexture(scale);
-		if(resize)
-			super.setSize(pane.width, pane.height);
 		return this;
 	} 
-	
-	public UITexture setTexture(Texture texture, float scale) {
-		return setTexture(texture, 1f, true);
-	}
-
-	public UITexture setTexture(Texture texture) {
-		return setTexture(texture, 1f);
-	}
 	
 	protected void updatePaneBounds(GraphAssist g) {
 		Point2D p = new Point2D.Float(0, 0);

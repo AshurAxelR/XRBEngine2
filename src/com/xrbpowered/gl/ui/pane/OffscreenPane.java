@@ -7,6 +7,7 @@ public class OffscreenPane extends AbstractPane {
 	protected OffscreenBuffer buffer = null;
 
 	public OffscreenPane() {
+		ydown = false;
 	}
 	
 	public OffscreenPane(OffscreenBuffer buffer) {

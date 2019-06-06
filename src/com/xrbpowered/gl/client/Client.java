@@ -30,6 +30,7 @@ public class Client {
 
 	private String title;
 	private long window = NULL;
+	private boolean setup = false;
 	
 	// TODO settings
 	private boolean fullscreen = false;
@@ -58,7 +59,8 @@ public class Client {
 			frameWidth = width;
 			frameHeight = height;
 			glViewport(0, 0, frameWidth, frameHeight);
-			resizeResources();
+			if(hasResources())
+				resizeResources();
 		}
 	};
 	
@@ -120,6 +122,14 @@ public class Client {
 	}
 	
 	/**
+	 * Check if resources have been set up. This is <code>true</code> after {@link #setupResources()} and before {@link #releaseResources()}. 
+	 * @return <code>true</code> if {@link #setupResources()} has finished.
+	 */
+	public boolean hasResources() {
+		return window!=NULL && setup;
+	}
+	
+	/**
 	 * Create and show new application window. Any existing window is destroyed first.
 	 * Once the window is created, {@link #setupResources()} is called.
 	 */
@@ -143,7 +153,6 @@ public class Client {
 		
 		if(window == NULL)
 			throw new RuntimeException("Failed to create the GLFW window");
-		centerWindow();
 		
 		glfwMakeContextCurrent(window);
 		glfwSwapInterval(1); // v-sync
@@ -152,9 +161,11 @@ public class Client {
 
 		glfwSetWindowSizeCallback(window, windowSizeCallback);
 		input.registerCallbacks(window);
+		centerWindow();
 		glfwShowWindow(window);
 		
 		setupResources();
+		setup = true;
 	}
 	
 	/**
@@ -164,6 +175,7 @@ public class Client {
 		if(!hasContext())
 			return;
 		releaseResources();
+		setup = false;
 		glfwFreeCallbacks(window);
 		glfwDestroyWindow(window);
 		window = NULL;

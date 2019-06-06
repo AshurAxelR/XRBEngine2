@@ -90,7 +90,7 @@ public class UIFpsOverlay extends UINode {
 		int fps = (int)(client.getFps()*10f);
 		if(fps!=currentFps) {
 			currentFps = fps;
-			repaint();
+			pane.repaint();
 		}
 		super.updateTime(dt);
 	}

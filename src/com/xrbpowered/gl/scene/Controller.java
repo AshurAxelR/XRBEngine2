@@ -37,6 +37,7 @@ public class Controller {
 	public boolean limitRotation = false;
 	
 	private boolean mouseLook = false;
+	private boolean cursorReset = false;
 	private boolean lookController = false;
 	
 	private Actor actor = null;
@@ -54,9 +55,9 @@ public class Controller {
 		if(mouseLook==enable)
 			return this;
 		this.mouseLook = enable;
+		input.enableMouseEvents = !enable;
 		glfwSetInputMode(input.window, GLFW_CURSOR, mouseLook ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
-		if(mouseLook)
-			glfwSetCursorPos(input.window, 0, 0);
+		cursorReset = false;
 		return this;
 	}
 	
@@ -82,17 +83,17 @@ public class Controller {
 
 		v.set(0, 0, 0, 1);
 		if(input.isKeyDown(keyForward) || forceForward)
-			v.z -= moveDelta;
-		if(input.isKeyDown(keyBack) && !forceForward)
 			v.z += moveDelta;
+		if(input.isKeyDown(keyBack) && !forceForward)
+			v.z -= moveDelta;
 		if(input.isKeyDown(keyStrafeLeft) && canStrafe)
 			v.x += moveDelta;
 		if(input.isKeyDown(keyStrafeRight) && canStrafe)
 			v.x -= moveDelta;
 		if(input.isKeyDown(keyFlyDown) && canStrafe)
-			v.y -= moveDelta;
-		if(input.isKeyDown(keyFlyUp) && canStrafe)
 			v.y += moveDelta;
+		if(input.isKeyDown(keyFlyUp) && canStrafe)
+			v.y -= moveDelta;
 		
 		if(lookController) {
 			v.negate();
@@ -104,25 +105,28 @@ public class Controller {
 
 		v.set(0, 0, 0, 1);
 		if(input.isKeyDown(keyLookUp))
-			v.x -= rotateDelta;
-		if(input.isKeyDown(keyLookDown))
 			v.x += rotateDelta;
+		if(input.isKeyDown(keyLookDown))
+			v.x -= rotateDelta;
 		if(input.isKeyDown(keyTurnLeft))
-			v.y -= rotateDelta;
-		if(input.isKeyDown(keyTurnRight))
 			v.y += rotateDelta;
+		if(input.isKeyDown(keyTurnRight))
+			v.y -= rotateDelta;
 
 		if(mouseLook) {
 			try(MemoryStack stack = stackPush()) {
-				DoubleBuffer pX = stack.mallocDouble(1);
-				DoubleBuffer pY = stack.mallocDouble(1);
-				glfwGetCursorPos(input.window, pX, pY);
-				double mx = pX.get(0);
-				double my = pY.get(0);
-				// System.out.printf("%.1f %.1f\n", mx, my);
-				v.y += mx * mouseSensitivity;
-				v.x -= my * mouseSensitivity;
+				if(cursorReset) {
+					DoubleBuffer pX = stack.mallocDouble(1);
+					DoubleBuffer pY = stack.mallocDouble(1);
+					glfwGetCursorPos(input.window, pX, pY);
+					double mx = pX.get(0);
+					double my = pY.get(0);
+					// System.out.printf("%.1f %.1f\n", mx, my);
+					v.y -= mx * mouseSensitivity;
+					v.x -= my * mouseSensitivity;
+				}
 				glfwSetCursorPos(input.window, 0, 0);
+				cursorReset = true;
 			}
 		}
 		

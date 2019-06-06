@@ -19,6 +19,9 @@ public class ClientInput {
 	public final Client client;
 	public long window; // FIXME getter
 	
+	public boolean enableMouseEvents = true;
+	public boolean enableKeyboardEvents = true;
+	
 	private float mouseX, mouseY;
 	private HashSet<Integer> pressedMouseButtons = new HashSet<>();
 	
@@ -31,7 +34,8 @@ public class ClientInput {
 		public void invoke(long window, double xpos, double ypos) {
 			mouseX = (float) xpos;
 			mouseY = (float) ypos;
-			client.mouseMoved(mouseX, mouseY);
+			if(enableMouseEvents)
+				client.mouseMoved(mouseX, mouseY);
 		}
 	};
 	
@@ -40,11 +44,13 @@ public class ClientInput {
 		public void invoke(long window, int button, int action, int mods) {
 			if(action==GLFW_PRESS) {
 				pressedMouseButtons.add(button);
-				client.mouseDown(mouseX, mouseY, button);
+				if(enableMouseEvents)
+					client.mouseDown(mouseX, mouseY, button);
 			}
 			else {
 				pressedMouseButtons.remove(button);
-				client.mouseUp(mouseX, mouseY, button);
+				if(enableMouseEvents)
+					client.mouseUp(mouseX, mouseY, button);
 			}
 		}
 	};
@@ -52,7 +58,8 @@ public class ClientInput {
 	private GLFWScrollCallbackI mouseScrollCallback = new GLFWScrollCallbackI() {
 		@Override
 		public void invoke(long window, double xoffset, double yoffset) {
-			client.mouseScroll(mouseX, mouseY, (float) -yoffset);
+			if(enableMouseEvents)
+				client.mouseScroll(mouseX, mouseY, (float) -yoffset);
 		}
 	};
 	
@@ -74,7 +81,7 @@ public class ClientInput {
 				else if(action==GLFW_RELEASE)
 					pressedKeys.remove(code);
 			}
-			if(action==GLFW_PRESS || action==GLFW_REPEAT) {
+			if(enableKeyboardEvents && (action==GLFW_PRESS || action==GLFW_REPEAT)) {
 				pushKeyCode(code);
 			}
 		}

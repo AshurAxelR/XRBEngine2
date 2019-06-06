@@ -8,6 +8,8 @@ public abstract class AbstractPane {
 	public int height = 0;
 	public float alpha = 1f;
 	
+	protected boolean ydown = true;
+	
 	private boolean visible = true;
 	
 	public AbstractPane() {
@@ -40,7 +42,7 @@ public abstract class AbstractPane {
 			return;
 		PaneShader shader = PaneShader.getInstance();
 		shader.use();
-		shader.updateUniforms(x, y, width, height, alpha);
+		shader.updateUniforms(x, y, width, height, alpha, ydown);
 		bindTexture(0);
 		shader.quad.draw();
 		shader.unuse();
