@@ -2,7 +2,7 @@ package com.xrbpowered.gl.ui.pane;
 
 import com.xrbpowered.gl.res.buffer.OffscreenBuffer;
 
-public class OffscreenPane extends AbstractPane {
+public class OffscreenPane extends Pane {
 
 	protected OffscreenBuffer buffer = null;
 
@@ -20,7 +20,7 @@ public class OffscreenPane extends AbstractPane {
 	
 	public void setBuffer(OffscreenBuffer buffer) {
 		if(this.buffer!=null)
-			this.buffer.destroy();
+			this.buffer.release();
 		this.buffer = buffer;
 	}
 	
@@ -49,9 +49,9 @@ public class OffscreenPane extends AbstractPane {
 		return super.isVisible() && buffer!=null;
 	}
 	
-	public void destroy() {
+	public void release() {
 		if(buffer!=null)
-			buffer.destroy();
+			buffer.release();
 	}
 
 }

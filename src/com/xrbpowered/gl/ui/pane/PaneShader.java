@@ -3,7 +3,7 @@ package com.xrbpowered.gl.ui.pane;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 
-import com.xrbpowered.gl.client.Client;
+import com.xrbpowered.gl.res.buffer.RenderTarget;
 import com.xrbpowered.gl.res.mesh.StaticMesh;
 import com.xrbpowered.gl.res.shader.Shader;
 import com.xrbpowered.gl.res.shader.VertexInfo;
@@ -34,6 +34,9 @@ public class PaneShader extends Shader {
 	private int alphaLocation;
 	private int screenSizeLocation;
 	
+	private float screenWidth = 0;
+	private float screenHeight = 0;
+	
 	@Override
 	protected void storeUniformLocations() {
 		alphaLocation = GL20.glGetUniformLocation(pId, "alpha");
@@ -43,15 +46,14 @@ public class PaneShader extends Shader {
 		screenSizeLocation = GL20.glGetUniformLocation(pId, "screenSize");
 		GL20.glUseProgram(pId);
 		GL20.glUniform1i(GL20.glGetUniformLocation(pId, "tex"), 0);
-		GL20.glUniform2f(screenSizeLocation, Client.getWidth(), Client.getHeight());
 		GL20.glUseProgram(0);
 	}
 	
-	public void resize() {
+	/*public void resize() { // TODO can be resized automatically
 		GL20.glUseProgram(pId);
 		GL20.glUniform2f(screenSizeLocation, Client.getWidth(), Client.getHeight()); // FIXME not static
 		GL20.glUseProgram(0);
-	}
+	}*/
 	
 	@Override
 	public void use() {
@@ -64,6 +66,18 @@ public class PaneShader extends Shader {
 	
 	@Override
 	public void updateUniforms() {
+	}
+
+	public void updateScreenSize(float width, float height) {
+		if(width!=screenWidth || height!=screenHeight) {
+			GL20.glUniform2f(screenSizeLocation, width, height);
+			screenWidth = width;
+			screenHeight = height;
+		}
+	}
+
+	public void updateScreenSize(RenderTarget target) {
+		updateScreenSize(target.getWidth(), target.getHeight());
 	}
 	
 	public void updateUniforms(float x, float y, float width, float height, float alpha, boolean ydown) {
@@ -82,23 +96,22 @@ public class PaneShader extends Shader {
 	}
 	
 	@Override
-	public void destroy() {
-		super.destroy();
-		quad.destroy();
+	public void release() {
+		super.release();
+		quad.release();
 	}
 	
 	private static PaneShader instance = null;
 	
+	public static void createInstance() {
+		instance = new PaneShader();
+	}
+	
 	public static PaneShader getInstance() {
-		if(instance==null)
-			instance = new PaneShader();
 		return instance;
 	}
 	
-	public static void destroyInstance() {
-		if(instance!=null) {
-			instance.destroy();
-			instance = null;
-		}
+	public static void releaseInstance() {
+		instance.release();
 	}
 }

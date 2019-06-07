@@ -13,17 +13,21 @@ import com.xrbpowered.zoomui.UIWindowFactory;
 public class UIClient extends Client {
 
 	// settings
-	private float uiScale = UIWindowFactory.getSystemScale();
+	// private float uiScale = UIWindowFactory.getSystemScale();
 
 	private ClientWindow uiWindow;
 	public Color clearColor = Color.BLACK;
 	
-	public UIClient(String title) {
+	public UIClient(String title, float scale) {
 		super(title);
 		uiWindow = new ClientWindow(this);
-		getContainer().setBaseScale(uiScale);
+		getContainer().setBaseScale(scale);
 	}
-	
+
+	public UIClient(String title) {
+		this(title, UIWindowFactory.getSystemScale());
+	}
+
 	public ClientWindow getUIWindow() {
 		return uiWindow;
 	}
@@ -32,19 +36,20 @@ public class UIClient extends Client {
 		return (ClientBaseContainer) uiWindow.getContainer();
 	}
 	
-	public void setupResources() {
+	public void createResources() {
+		PaneShader.createInstance();
 		getContainer().setupResources();
 	}
 
 	@Override
 	public void resizeResources() {
-		PaneShader.getInstance().resize();
 		uiWindow.notifyResized();
 		getContainer().resizeResources();
 	}
 
 	public void releaseResources() {
 		getContainer().releaseResources();
+		PaneShader.releaseInstance();
 	}
 
 	@Override

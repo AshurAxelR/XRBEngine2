@@ -106,7 +106,7 @@ public class Texture {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texId);
 	}
 	
-	public void destroy() {
+	public void release() {
 		GL11.glDeleteTextures(texId);
 	}
 

@@ -18,7 +18,6 @@ import org.lwjgl.system.MemoryStack;
 
 import com.xrbpowered.gl.res.asset.AssetManager;
 import com.xrbpowered.gl.res.asset.CPAssetManager;
-import com.xrbpowered.gl.res.buffer.PrimaryBuffer;
 import com.xrbpowered.gl.res.buffer.RenderTarget;
 
 /**
@@ -46,9 +45,18 @@ public class Client {
 	/**
 	 * {@link RenderTarget} for the window's primary OpenGL buffer.
 	 */
-	public final PrimaryBuffer primaryBuffer = new PrimaryBuffer(this);
+	public final RenderTarget primaryBuffer = new RenderTarget(0, 0, 0) {
+		@Override
+		public int getWidth() {
+			return Client.this.getWidth();
+		}
+		@Override
+		public int getHeight() {
+			return Client.this.getHeight();
+		}
+	};
 	
-	private static int frameWidth, frameHeight;
+	private int frameWidth, frameHeight;
 	
 	private int frames = 0;
 	private float fpsTime = 0;
@@ -131,8 +139,8 @@ public class Client {
 	}
 	
 	/**
-	 * Check if resources have been set up. This is <code>true</code> after {@link #setupResources()} and before {@link #releaseResources()}. 
-	 * @return <code>true</code> if {@link #setupResources()} has finished.
+	 * Check if resources have been created. This is <code>true</code> after {@link #createResources()} and before {@link #releaseResources()}. 
+	 * @return <code>true</code> if {@link #createResources()} has finished.
 	 */
 	public boolean hasResources() {
 		return window!=NULL && setup;
@@ -140,7 +148,7 @@ public class Client {
 	
 	/**
 	 * Create and show new application window. Any existing window is destroyed first.
-	 * Once the window is created, {@link #setupResources()} is called.
+	 * Once the window is created, {@link #createResources()} is called.
 	 */
 	public void createWindow() {
 		if(hasContext())
@@ -175,7 +183,7 @@ public class Client {
 		centerWindow();
 		glfwShowWindow(window);
 		
-		setupResources();
+		createResources();
 		setup = true;
 	}
 	
@@ -207,8 +215,12 @@ public class Client {
 	
 	/**
 	 * Override this method to initialise OpenGL resources (textures, models, etc.).
+	 * This method may be called multiple times during application life cycle,
+	 * for example, when a window is re-created to switch between fullscreen and windowed modes.
+	 * In this case, {@link #releaseResources()} is always called before {@link #createResources()}.
+	 * Not cleaning up resources in {@link #releaseResources()} may cause memory leaks.
 	 */
-	public void setupResources() {
+	public void createResources() {
 	}
 	
 	/**
@@ -219,6 +231,7 @@ public class Client {
 	
 	/**
 	 * Override this method to clean-up OpenGL resources.
+	 * Not cleaning up resources in {@link #releaseResources()} may cause memory leaks.
 	 */
 	public void releaseResources() {
 	}
@@ -235,7 +248,7 @@ public class Client {
 	 * Get primary OpenGL buffer width.
 	 * @return width in pixels.
 	 */
-	public static int getWidth() {
+	public int getWidth() {
 		return frameWidth;
 	}
 	
@@ -243,7 +256,7 @@ public class Client {
 	 * Get primary OpenGL buffer height.
 	 * @return height in pixels.
 	 */
-	public static int getHeight() {
+	public int getHeight() {
 		return frameHeight;
 	}
 	

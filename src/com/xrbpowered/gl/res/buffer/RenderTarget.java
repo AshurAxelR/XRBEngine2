@@ -35,7 +35,7 @@ public abstract class RenderTarget {
 		return this;
 	}
 	
-	public void destroy() {
+	public void release() {
 	}
 	
 	public static void blit(RenderTarget source, RenderTarget target, boolean filter) {

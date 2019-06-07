@@ -80,7 +80,7 @@ public class OffscreenBuffer extends RenderTarget {
 	}
 
 	@Override
-	public void destroy() {
+	public void release() {
 		GL30.glDeleteFramebuffers(fbo);
 		GL11.glDeleteTextures(colorTexId);
 		if(depthTexId>0)

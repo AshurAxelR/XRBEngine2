@@ -90,6 +90,7 @@ public class UIPane extends UITexture {
 
 	@Override
 	public void releaseResources() {
+		pane.release();
 	}
 
 	@Override
@@ -99,7 +100,7 @@ public class UIPane extends UITexture {
 	public void render(RenderTarget target) {
 		if(requestRepaint)
 			updateBuffer();
-		pane.draw();
+		pane.draw(target);
 	}
 
 }

@@ -38,7 +38,13 @@ public class UITexture extends UINode {
 	}
 	
 	public void render(RenderTarget target) {
-		pane.draw();
+		pane.draw(target);
 		super.render(target);
+	}
+	
+	@Override
+	public void releaseResources() {
+		pane.release();
+		super.releaseResources();
 	}
 }

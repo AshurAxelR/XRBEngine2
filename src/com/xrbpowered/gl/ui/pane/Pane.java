@@ -1,6 +1,8 @@
 package com.xrbpowered.gl.ui.pane;
 
-public abstract class AbstractPane {
+import com.xrbpowered.gl.res.buffer.RenderTarget;
+
+public abstract class Pane {
 
 	public int x = 0;
 	public int y = 0;
@@ -12,18 +14,18 @@ public abstract class AbstractPane {
 	
 	private boolean visible = true;
 	
-	public AbstractPane() {
+	public Pane() {
 	}
 	
 	protected abstract void bindTexture(int index);
 	
-	public AbstractPane setAnchor(int x, int y) {
+	public Pane setAnchor(int x, int y) {
 		this.x = x;
 		this.y = y;
 		return this;
 	}
 	
-	public AbstractPane setSize(int w, int h) {
+	public Pane setSize(int w, int h) {
 		this.width = w;
 		this.height = h;
 		return this;
@@ -37,18 +39,19 @@ public abstract class AbstractPane {
 		this.visible = visible;
 	}
 	
-	public void draw() {
+	public void draw(RenderTarget target) {
 		if(!isVisible() || alpha<=0f)
 			return;
 		PaneShader shader = PaneShader.getInstance();
 		shader.use();
+		shader.updateScreenSize(target);
 		shader.updateUniforms(x, y, width, height, alpha, ydown);
 		bindTexture(0);
 		shader.quad.draw();
 		shader.unuse();
 	}
 	
-	public void destroy() {
+	public void release() {
 	}
 	
 }

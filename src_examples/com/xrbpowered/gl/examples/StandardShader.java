@@ -119,7 +119,7 @@ public class StandardShader extends ActorShader {
 	
 	public static void destroyInstance() {
 		if(instance!=null) {
-			instance.destroy();
+			instance.release();
 			instance = null;
 		}
 	}

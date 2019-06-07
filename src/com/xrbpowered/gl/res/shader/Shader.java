@@ -67,7 +67,7 @@ public abstract class Shader {
 		GL20.glUseProgram(0);
 	}
 	
-	public void destroy() {
+	public void release() {
 		GL20.glUseProgram(0);
 		GL20.glDeleteProgram(pId);
 	}

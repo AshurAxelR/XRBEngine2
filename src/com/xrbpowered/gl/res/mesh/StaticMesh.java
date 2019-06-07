@@ -179,7 +179,7 @@ public class StaticMesh {
 		draw(null);
 	}
 	
-	public void destroy() {
+	public void release() {
 		GL30.glBindVertexArray(vaoId);
 		for(int i=0; i<countAttribs; i++)
 			GL20.glDisableVertexAttribArray(i);

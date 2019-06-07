@@ -31,7 +31,7 @@ public class GLSimple extends Client {
 	}
 	
 	@Override
-	public void setupResources() {
+	public void createResources() {
 		glClearColor(0.5f, 0.5f, 0.5f, 1f);
 		
 		camera = new CameraActor.Perspective().setAspectRatio(getWidth(), getHeight());
@@ -52,7 +52,7 @@ public class GLSimple extends Client {
 		meshActor.position = new Vector3f(0, 0, -2);
 		meshActor.updateTransform();
 		
-		super.setupResources();
+		super.createResources();
 	}
 	
 	@Override

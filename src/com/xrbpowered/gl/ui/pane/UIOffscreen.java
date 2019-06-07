@@ -55,7 +55,13 @@ public class UIOffscreen extends UINode {
 		pane.getBuffer().use();
 		renderBuffer(pane.getBuffer());
 		target.use();
-		pane.draw();
+		pane.draw(target);
 		super.render(target);
+	}
+	
+	@Override
+	public void releaseResources() {
+		pane.getBuffer().release();
+		super.releaseResources();
 	}
 }

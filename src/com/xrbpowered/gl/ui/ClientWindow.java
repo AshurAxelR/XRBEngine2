@@ -2,7 +2,6 @@ package com.xrbpowered.gl.ui;
 
 import java.awt.Cursor;
 
-import com.xrbpowered.gl.client.Client;
 import com.xrbpowered.gl.client.UIClient;
 import com.xrbpowered.zoomui.BaseContainer;
 import com.xrbpowered.zoomui.UIModalWindow;
@@ -41,12 +40,12 @@ public class ClientWindow extends UIWindow {
 
 	@Override
 	public int getClientWidth() {
-		return Client.getWidth();
+		return client.getWidth();
 	}
 
 	@Override
 	public int getClientHeight() {
-		return Client.getHeight();
+		return client.getHeight();
 	}
 
 	@Override

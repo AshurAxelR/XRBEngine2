@@ -61,9 +61,9 @@ public class MultisampleBuffer extends OffscreenBuffer {
 	}
 	
 	@Override
-	public void destroy() {
-		resolve.destroy();
-		super.destroy();
+	public void release() {
+		resolve.release();
+		super.release();
 	}
 
 }

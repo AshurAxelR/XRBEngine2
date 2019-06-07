@@ -2,7 +2,7 @@ package com.xrbpowered.gl.ui.pane;
 
 import com.xrbpowered.gl.res.texture.Texture;
 
-public class TexturePane extends AbstractPane {
+public class TexturePane extends Pane {
 
 	protected Texture texture = null;
 
@@ -19,7 +19,7 @@ public class TexturePane extends AbstractPane {
 	
 	public void setTexture(Texture texture) {
 		if(this.texture!=null)
-			this.texture.destroy();
+			this.texture.release();
 		this.texture = texture;
 	}
 	
@@ -48,9 +48,10 @@ public class TexturePane extends AbstractPane {
 		return super.isVisible() && texture!=null;
 	}
 	
-	public void destroy() {
+	public void release() {
 		if(texture!=null)
-			texture.destroy();
+			texture.release();
+		super.release();
 	}
 	
 }
