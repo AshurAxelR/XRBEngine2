@@ -3,8 +3,6 @@ package com.xrbpowered.gl.examples.tutorial;
 import static org.lwjgl.opengl.GL11.*;
 
 import com.xrbpowered.gl.client.Client;
-import com.xrbpowered.gl.res.asset.AssetManager;
-import com.xrbpowered.gl.res.asset.FileAssetManager;
 import com.xrbpowered.gl.res.texture.Texture;
 import com.xrbpowered.gl.ui.pane.Pane;
 import com.xrbpowered.gl.ui.pane.PaneShader;
@@ -16,14 +14,13 @@ public class GLQuadPane extends Client {
 	
 	public GLQuadPane() {
 		super("Quad using Pane");
-		AssetManager.defaultAssets = new FileAssetManager("example_assets", AssetManager.defaultAssets);
 	}
 	
 	@Override
 	public void createResources() {
 		glClearColor(0.5f, 0.5f, 0.5f, 1f);
 		PaneShader.createInstance();
-		quad = new TexturePane(new Texture("checker.png")).setAnchor(10, 10).setSize(512, 512);
+		quad = new TexturePane(new Texture("example_assets/checker.png")).setAnchor(10, 10).setSize(512, 512);
 	}
 	
 	@Override

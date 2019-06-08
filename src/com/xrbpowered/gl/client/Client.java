@@ -34,6 +34,7 @@ public class Client {
 	
 	// TODO settings
 	private boolean fullscreen = false;
+	private boolean vsync = true;
 	private int windowedWidth = 1600;
 	private int windowedHeight = 900;
 	
@@ -163,7 +164,9 @@ public class Client {
 		
 		if(fullscreen) {
 			GLFWVidMode mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
-			window = glfwCreateWindow(mode.width(), mode.height(), title, NULL, NULL);
+			frameWidth = mode.width();
+			frameHeight = mode.height();
+			window = glfwCreateWindow(frameWidth, frameHeight, title, NULL, NULL);
 		}
 		else
 			window = glfwCreateWindow(windowedWidth, windowedHeight, title, NULL, NULL);
@@ -172,7 +175,7 @@ public class Client {
 			throw new RuntimeException("Failed to create the GLFW window");
 		
 		glfwMakeContextCurrent(window);
-		glfwSwapInterval(1); // v-sync
+		glfwSwapInterval(vsync ? 1 : 0);
 
 		GL.createCapabilities();
 
