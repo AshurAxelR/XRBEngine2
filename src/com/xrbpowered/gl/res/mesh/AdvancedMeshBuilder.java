@@ -8,7 +8,6 @@ import java.util.List;
 import org.joml.Vector3f;
 import org.lwjgl.BufferUtils;
 
-import com.xrbpowered.gl.examples.StandardShader;
 import com.xrbpowered.gl.res.shader.VertexInfo;
 import com.xrbpowered.gl.res.shader.VertexInfo.Attribute;
 
@@ -228,12 +227,12 @@ public class AdvancedMeshBuilder extends MeshBuilder {
 			f.putIndices(indexBuffer);
 		indexBuffer.flip();
 		
-		FloatBuffer vertexBuffer = BufferUtils.createByteBuffer(countVertices * StandardShader.standardVertexInfo.getStride()).asFloatBuffer();
+		FloatBuffer vertexBuffer = BufferUtils.createByteBuffer(countVertices * info.getStride()).asFloatBuffer();
 		for(Vertex v : vertices)
 			v.put(vertexBuffer);
 		vertexBuffer.flip();
 		
-		return new StaticMesh(StandardShader.standardVertexInfo, vertexBuffer, indexBuffer, countIndices, vpe, false);
+		return new StaticMesh(info, vertexBuffer, indexBuffer, countIndices, vpe, false);
 	}
 
 }
