@@ -79,7 +79,7 @@ public class GLClientWindow extends UIClient {
 				camera = new CameraActor.Perspective().setAspectRatio(getWidth(), getHeight());
 				camera.position = new Vector3f(0, 0, 3);
 				camera.updateTransform();
-				controller = new Controller(input).setLookController(true).setActor(camera);
+				controller = new Controller(input).setActor(camera);
 				
 				shader = StandardShader.getInstance();
 				shader.ambientColor.set(0.5f, 0.5f, 0.5f, 1f);

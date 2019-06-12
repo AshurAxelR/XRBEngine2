@@ -155,7 +155,7 @@ public abstract class MeshBuilder {
 		this.customOffs = offs;
 		return this;
 	}
-	
+
 	public abstract StaticMesh create();
 	
 	protected static void setData(VertexInfo info, VertexInfo.Attribute attrib, int offs, float[] data, int index, float x) {

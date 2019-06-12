@@ -7,6 +7,7 @@ import static org.lwjgl.system.MemoryStack.*;
 import java.nio.DoubleBuffer;
 
 import org.joml.Matrix4f;
+import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.system.MemoryStack;
@@ -32,15 +33,14 @@ public class Controller {
 	public float keyboardRotateSpeed = (float)(Math.PI/2f);
 	public float mouseSensitivity = 0.002f;
 	
-	public boolean forceForward = false;
-	public boolean canStrafe = true;
-	public boolean limitRotation = false;
-	
 	private boolean mouseLook = false;
 	private boolean cursorReset = false;
-	private boolean lookController = false;
 	
-	private Actor actor = null;
+	protected Actor actor = null;
+	protected Vector3f velocity = new Vector3f();
+	
+	protected Vector4f moveVectorScale = new Vector4f(1f, 1f, 1f, 1f); /* strafe, fly, fwd, back */
+	protected boolean lookAlign = true;
 	
 	public Controller(ClientInput input) {
 		this.input = input;
@@ -61,58 +61,51 @@ public class Controller {
 		return this;
 	}
 	
-	public Controller setLookController(boolean look) {
-		this.lookController = look;
-		return this;
-	}
-	
-	private static final Vector4f v = new Vector4f(0, 0, 0, 1);
-	private static final Matrix4f m = new Matrix4f();
-	
-	protected void applyVelocity(Vector3f position, Vector4f v) {
-		actor.position.x += v.x;
-		actor.position.y += v.y;
-		actor.position.z += v.z;
-	}
-	
-	public void update(float dt) {
-		if(actor==null)
-			return;
-		float moveDelta = moveSpeed * dt;
-		float rotateDelta = keyboardRotateSpeed * dt;
-
-		v.set(0, 0, 0, 1);
-		if(input.isKeyDown(keyForward) || forceForward)
-			v.z += moveDelta;
-		if(input.isKeyDown(keyBack) && !forceForward)
-			v.z -= moveDelta;
-		if(input.isKeyDown(keyStrafeLeft) && canStrafe)
-			v.x += moveDelta;
-		if(input.isKeyDown(keyStrafeRight) && canStrafe)
-			v.x -= moveDelta;
-		if(input.isKeyDown(keyFlyDown) && canStrafe)
-			v.y += moveDelta;
-		if(input.isKeyDown(keyFlyUp) && canStrafe)
-			v.y -= moveDelta;
+	protected void updateMove(Vector3f move) {
+		if(input.isKeyDown(keyForward))
+			move.z += 1;
+		if(input.isKeyDown(keyBack))
+			move.z -= 1;
+		if(input.isKeyDown(keyStrafeLeft))
+			move.x += 1;
+		if(input.isKeyDown(keyStrafeRight))
+			move.x -= 1;
+		if(input.isKeyDown(keyFlyDown))
+			move.y += 1;
+		if(input.isKeyDown(keyFlyUp))
+			move.y -= 1;
 		
-		if(lookController) {
-			v.negate();
-			m.identity();
-			Actor.rotateYawPitchRoll(actor.rotation, m);
-			m.transform(v);
-		}
-		applyVelocity(actor.position, v);
-
-		v.set(0, 0, 0, 1);
-		if(input.isKeyDown(keyLookUp))
-			v.x += rotateDelta;
-		if(input.isKeyDown(keyLookDown))
-			v.x -= rotateDelta;
-		if(input.isKeyDown(keyTurnLeft))
-			v.y += rotateDelta;
-		if(input.isKeyDown(keyTurnRight))
-			v.y -= rotateDelta;
-
+		if(move.length()>0f)
+			move.normalize();
+		
+		move.x *= moveVectorScale.x;
+		move.y *= moveVectorScale.y;
+		move.z *= move.z>0f ? moveVectorScale.z : moveVectorScale.w;
+	}
+	
+	private final Vector4f v4 = new Vector4f();
+	private final Matrix4f m = new Matrix4f();
+	
+	protected void lookAlign(Vector3f move, Vector3f rotation) {
+		move.negate();
+		m.identity();
+		Actor.rotateYawPitchRoll(rotation, m);
+		v4.set(move, 0);
+		m.transform(v4);
+		move.set(v4.x, v4.y, v4.z);
+	}
+	
+	protected void updateVelocity(Vector3f move, float dt) {
+		velocity.set(move.mul(moveSpeed * dt));
+	}
+	
+	protected void applyVelocity() {
+		actor.position.x += velocity.x;
+		actor.position.y += velocity.y;
+		actor.position.z += velocity.z;
+	}
+	
+	protected void addMouseLook(Vector2f look) {
 		if(mouseLook) {
 			try(MemoryStack stack = stackPush()) {
 				if(cursorReset) {
@@ -121,20 +114,53 @@ public class Controller {
 					glfwGetCursorPos(input.window, pX, pY);
 					double mx = pX.get(0);
 					double my = pY.get(0);
-					// System.out.printf("%.1f %.1f\n", mx, my);
-					v.y -= mx * mouseSensitivity;
-					v.x -= my * mouseSensitivity;
+					look.y -= mx * mouseSensitivity;
+					look.x -= my * mouseSensitivity;
 				}
 				glfwSetCursorPos(input.window, 0, 0);
 				cursorReset = true;
 			}
 		}
-		
-		actor.rotation.x += v.x;
+	}
+	
+	protected void updateTurn(Vector2f turn, float dt) {
+		float rotateDelta = keyboardRotateSpeed * dt;
+		if(input.isKeyDown(keyLookUp))
+			turn.x += rotateDelta;
+		if(input.isKeyDown(keyLookDown))
+			turn.x -= rotateDelta;
+		if(input.isKeyDown(keyTurnLeft))
+			turn.y += rotateDelta;
+		if(input.isKeyDown(keyTurnRight))
+			turn.y -= rotateDelta;
+		addMouseLook(turn);
+	}
+	
+	protected void applyRotation(Vector2f turn) {
+		actor.rotation.x += turn.x;
+		actor.rotation.y += turn.y;
+	}
+	
+	private final Vector3f move = new Vector3f();
+	private final Vector2f turn = new Vector2f();
+	
+	public void update(float dt) {
+		if(actor==null)
+			return;
+
+		move.zero();
+		updateMove(move);
+		if(lookAlign)
+			lookAlign(move, actor.rotation);
+		updateVelocity(move, dt);
+		applyVelocity();
+
+		turn.zero();
+		updateTurn(turn, dt);
 		/*if(limitRotation) {
 			actor.rotation.x = (float) MathUtils.snap(actor.rotation.x, -Math.PI/2.0, Math.PI/2.0);
 		}*/
-		actor.rotation.y += v.y;
+		applyRotation(turn);
 		
 		actor.updateTransform();
 	}

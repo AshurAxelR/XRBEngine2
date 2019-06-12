@@ -33,10 +33,11 @@ public class Client {
 	private boolean setup = false;
 	
 	// TODO settings
-	private boolean fullscreen = false;
-	private boolean vsync = true;
-	private int windowedWidth = 1600;
-	private int windowedHeight = 900;
+	public boolean fullscreen = false;
+	public boolean vsync = true;
+	public long noVsyncSleep = 12;
+	public int windowedWidth = 1600;
+	public int windowedHeight = 900;
 	
 	/**
 	 * User input manager.
@@ -122,6 +123,13 @@ public class Client {
 			render(dt);
 
 			glfwSwapBuffers(window);
+			if(!vsync && noVsyncSleep>0) {
+				try {
+					Thread.sleep(noVsyncSleep);
+				}
+				catch(InterruptedException e) {
+				}
+			}
 			t0 = t;
 		}
 		

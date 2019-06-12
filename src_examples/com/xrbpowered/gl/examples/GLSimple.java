@@ -37,7 +37,7 @@ public class GLSimple extends Client {
 		camera = new CameraActor.Perspective().setAspectRatio(getWidth(), getHeight());
 		camera.position = new Vector3f(0, 0, 3);
 		camera.updateTransform();
-		controller = new Controller(input).setLookController(true).setActor(camera);
+		controller = new Controller(input).setActor(camera);
 		controller.setMouseLook(true);
 		
 		shader = StandardShader.getInstance();

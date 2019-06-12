@@ -220,7 +220,7 @@ public class AdvancedMeshBuilder extends MeshBuilder {
 		if(countIndices==0 || countVertices==0)
 			return null;
 		
-		// System.out.printf("%d vertices, %d faces", countVertices, countTris());
+		System.out.printf("%d vertices, %d tris, %d indices\n", countVertices, countTris(), countIndices);
 		
 		ShortBuffer indexBuffer = BufferUtils.createByteBuffer(countIndices * 2).asShortBuffer();
 		for(Face f : faces)

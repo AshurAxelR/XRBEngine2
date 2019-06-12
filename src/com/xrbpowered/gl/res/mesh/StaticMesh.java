@@ -24,18 +24,6 @@ public class StaticMesh {
 	private int countAttribs;
 	private int drawMode = GL11.GL_TRIANGLES;
 
-	public StaticMesh(VertexInfo info, int vaoId, int vboId, int vboiId, int countElements, int verticesPerElement) {
-		this.countElements = countElements;
-		this.drawMode = getDrawMode(verticesPerElement);
-		
-		this.vaoId = vaoId;
-		this.vboId = vboId;
-		this.vboiId = vboiId;
-
-		this.countAttribs = info.getAttributeCount();
-		info.initAttribPointers();
-	}
-
 	public StaticMesh(VertexInfo info, float[] vertexData, short[] indexData) {
 		this(info, vertexData, indexData, 3, false);
 	}
