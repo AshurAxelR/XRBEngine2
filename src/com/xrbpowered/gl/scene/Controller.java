@@ -99,7 +99,7 @@ public class Controller {
 		velocity.set(move.mul(moveSpeed * dt));
 	}
 	
-	protected void applyVelocity() {
+	protected void applyVelocity(float dt) {
 		actor.position.x += velocity.x;
 		actor.position.y += velocity.y;
 		actor.position.z += velocity.z;
@@ -153,7 +153,7 @@ public class Controller {
 		if(lookAlign)
 			lookAlign(move, actor.rotation);
 		updateVelocity(move, dt);
-		applyVelocity();
+		applyVelocity(dt);
 
 		turn.zero();
 		updateTurn(turn, dt);
