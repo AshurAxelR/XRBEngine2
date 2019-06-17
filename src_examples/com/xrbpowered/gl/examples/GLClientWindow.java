@@ -3,6 +3,7 @@ package com.xrbpowered.gl.examples;
 import java.awt.Color;
 
 import org.joml.Vector3f;
+import org.lwjgl.opengl.GL11;
 
 import com.xrbpowered.gl.client.UIClient;
 import com.xrbpowered.gl.res.asset.AssetManager;
@@ -75,6 +76,8 @@ public class GLClientWindow extends UIClient {
 			
 			@Override
 			public void setupResources() {
+				GL11.glEnable(GL11.GL_CULL_FACE);
+				
 				clearColor = new Color(0x777777);
 				camera = new CameraActor.Perspective().setAspectRatio(getWidth(), getHeight());
 				camera.position = new Vector3f(0, 0, 3);

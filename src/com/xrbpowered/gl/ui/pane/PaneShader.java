@@ -24,13 +24,13 @@ public class PaneShader extends Shader {
 				1, 1, 1, 1,
 				0, 1, 0, 1
 		}, new short[] {
-				0, 1, 2, 0, 2, 3
+				0, 2, 1, 0, 3, 2
 		});
 	}
 	
 	private int panePositionLocation;
 	private int paneSizeLocation;
-	private int yscaleLocation;
+	private int ydownLocation;
 	private int alphaLocation;
 	private int screenSizeLocation;
 	
@@ -42,7 +42,7 @@ public class PaneShader extends Shader {
 		alphaLocation = GL20.glGetUniformLocation(pId, "alpha");
 		panePositionLocation = GL20.glGetUniformLocation(pId, "panePosition");
 		paneSizeLocation = GL20.glGetUniformLocation(pId, "paneSize");
-		yscaleLocation = GL20.glGetUniformLocation(pId, "yscale");
+		ydownLocation = GL20.glGetUniformLocation(pId, "ydown");
 		screenSizeLocation = GL20.glGetUniformLocation(pId, "screenSize");
 		GL20.glUseProgram(pId);
 		GL20.glUniform1i(GL20.glGetUniformLocation(pId, "tex"), 0);
@@ -84,7 +84,7 @@ public class PaneShader extends Shader {
 		GL20.glUniform2f(panePositionLocation, x, y);
 		GL20.glUniform2f(paneSizeLocation, width, height);
 		GL20.glUniform1f(alphaLocation, alpha);
-		GL20.glUniform1f(yscaleLocation, ydown ? -1 : 1);
+		GL20.glUniform1i(ydownLocation, ydown ? 1 : 0);
 	}
 	
 	@Override
