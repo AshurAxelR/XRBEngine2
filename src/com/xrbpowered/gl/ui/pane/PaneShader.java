@@ -49,12 +49,6 @@ public class PaneShader extends Shader {
 		GL20.glUseProgram(0);
 	}
 	
-	/*public void resize() { // TODO can be resized automatically
-		GL20.glUseProgram(pId);
-		GL20.glUniform2f(screenSizeLocation, Client.getWidth(), Client.getHeight()); // FIXME not static
-		GL20.glUseProgram(0);
-	}*/
-	
 	@Override
 	public void use() {
 		GL11.glDisable(GL11.GL_DEPTH_TEST);

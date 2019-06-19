@@ -5,6 +5,7 @@ import static org.lwjgl.glfw.GLFW.*;
 
 import java.util.HashSet;
 
+import org.joml.Vector2f;
 import org.lwjgl.glfw.GLFW;
 import org.lwjgl.glfw.GLFWCharCallback;
 import org.lwjgl.glfw.GLFWCursorPosCallbackI;
@@ -17,14 +18,16 @@ import com.xrbpowered.zoomui.UIElement;
 public class ClientInput {
 
 	public final Client client;
-	public long window; // FIXME getter
+	private long window;
 	
 	public boolean enableMouseEvents = true;
 	public boolean enableKeyboardEvents = true;
 	
 	private float mouseX, mouseY;
 	private HashSet<Integer> pressedMouseButtons = new HashSet<>();
-	
+	private boolean deltaInput = false;
+	private boolean cursorReset = false;
+
 	private int keyMods = 0;
 	private int keyCode = 0;
 	private HashSet<Integer> pressedKeys = new HashSet<>();
@@ -112,6 +115,10 @@ public class ClientInput {
 		pressedKeys.clear();
 	}
 	
+	public long getWindow() {
+		return window;
+	}
+	
 	public void pollEvents() {
 		glfwPollEvents();
 		pushKeyCode(0);
@@ -128,6 +135,27 @@ public class ClientInput {
 			client.keyPressed(c, keyCode);
 		keyCode = 0;
 	}
+	
+	public void setDeltaInput(boolean enable) {
+		if(deltaInput!=enable) {
+			this.deltaInput = enable;
+			this.enableMouseEvents = !enable;
+			glfwSetInputMode(window, GLFW_CURSOR, enable ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
+			cursorReset = false;
+		}
+	}
+	
+	public Vector2f addDeltaInput(Vector2f look, float scale) {
+		if(deltaInput) {
+			if(cursorReset) {
+				look.y += mouseX * scale;
+				look.x += mouseY * scale;
+			}
+			glfwSetCursorPos(window, 0, 0);
+			cursorReset = true;
+		}
+		return look;
+	}
 
 	public boolean isMouseDown() {
 		return !pressedMouseButtons.isEmpty();
@@ -141,16 +169,12 @@ public class ClientInput {
 		return keyMods;
 	}
 	
-	public int getMouseButtons() { // TODO change to ZoomUI mouse buttons
-		int buttons = 0;
-		int d = 1;
-		for(int i=GLFW_MOUSE_BUTTON_1; i<=GLFW_MOUSE_BUTTON_LAST; i++) {
-			int state = glfwGetMouseButton(window, i);
-			if(state==GLFW_PRESS)
-				buttons |= d;
-			d = d<<1;
-		}
-		return buttons;
+	public float getMouseX() {
+		return mouseX;
+	}
+
+	public float getMouseY() {
+		return mouseY;
 	}
 	
 	public boolean isKeyDown(Integer code) {

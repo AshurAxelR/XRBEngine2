@@ -1,16 +1,11 @@
 package com.xrbpowered.gl.scene;
 
 import static java.awt.event.KeyEvent.*;
-import static org.lwjgl.glfw.GLFW.*;
-import static org.lwjgl.system.MemoryStack.*;
-
-import java.nio.DoubleBuffer;
 
 import org.joml.Matrix4f;
 import org.joml.Vector2f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
-import org.lwjgl.system.MemoryStack;
 
 import com.xrbpowered.gl.client.ClientInput;
 
@@ -34,7 +29,6 @@ public class Controller {
 	public float mouseSensitivity = 0.002f;
 	
 	private boolean mouseLook = false;
-	private boolean cursorReset = false;
 	
 	protected Actor actor = null;
 	protected Vector3f velocity = new Vector3f();
@@ -52,12 +46,8 @@ public class Controller {
 	}
 	
 	public Controller setMouseLook(boolean enable) {
-		if(mouseLook==enable)
-			return this;
 		this.mouseLook = enable;
-		input.enableMouseEvents = !enable;
-		glfwSetInputMode(input.window, GLFW_CURSOR, mouseLook ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
-		cursorReset = false;
+		input.setDeltaInput(enable);
 		return this;
 	}
 	
@@ -106,21 +96,8 @@ public class Controller {
 	}
 	
 	protected void addMouseLook(Vector2f look) {
-		if(mouseLook) {
-			try(MemoryStack stack = stackPush()) {
-				if(cursorReset) {
-					DoubleBuffer pX = stack.mallocDouble(1);
-					DoubleBuffer pY = stack.mallocDouble(1);
-					glfwGetCursorPos(input.window, pX, pY);
-					double mx = pX.get(0);
-					double my = pY.get(0);
-					look.y -= mx * mouseSensitivity;
-					look.x -= my * mouseSensitivity;
-				}
-				glfwSetCursorPos(input.window, 0, 0);
-				cursorReset = true;
-			}
-		}
+		if(mouseLook)
+			input.addDeltaInput(look, -mouseSensitivity);
 	}
 	
 	protected void updateTurn(Vector2f turn, float dt) {
