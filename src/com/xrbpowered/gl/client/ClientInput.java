@@ -151,10 +151,20 @@ public class ClientInput {
 				look.y += mouseX * scale;
 				look.x += mouseY * scale;
 			}
-			glfwSetCursorPos(window, 0, 0);
-			cursorReset = true;
+			resetMousePos();
 		}
 		return look;
+	}
+	
+	public void setMousePos(float x, float y) {
+		glfwSetCursorPos(window, x, y);
+		mouseX = x;
+		mouseY = y;
+	}
+	
+	public void resetMousePos() {
+		setMousePos(0, 0);
+		cursorReset = true;
 	}
 
 	public boolean isMouseDown() {
