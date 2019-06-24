@@ -16,8 +16,9 @@ public class CameraShader extends Shader {
 		super(info, pathVS, pathFS);
 	}
 	
-	public void setCamera(CameraActor camera) {
+	public CameraShader setCamera(CameraActor camera) {
 		this.camera = camera;
+		return this;
 	}
 	
 	public CameraActor getCamera() {

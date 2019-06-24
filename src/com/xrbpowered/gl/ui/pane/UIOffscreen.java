@@ -16,16 +16,22 @@ public class UIOffscreen extends UINode {
 
 	public final OffscreenPane pane = new OffscreenPane();
 	public Color clearColor = Color.RED;
+	public final float bufferScale;
+	
+	public UIOffscreen(UIContainer parent, float scale) {
+		super(parent);
+		this.bufferScale = scale;
+	}
 	
 	public UIOffscreen(UIContainer parent) {
-		super(parent);
+		this(parent, 1f);
 	}
 
 	@Override
 	public void setSize(float width, float height) {
 		if(width==getWidth() && height==getHeight())
 			return;
-		float pix = getPixelScale();
+		float pix = getPixelScale() * bufferScale;
 		OffscreenBuffer buffer = new OffscreenBuffer((int)(width/pix), (int)(height/pix), true);
 		pane.setBuffer(buffer);
 		super.setSize(width, height);
