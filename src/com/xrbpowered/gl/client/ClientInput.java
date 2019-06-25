@@ -20,9 +20,6 @@ public class ClientInput {
 	public final Client client;
 	private long window;
 	
-	public boolean enableMouseEvents = true;
-	public boolean enableKeyboardEvents = true;
-	
 	private float mouseX, mouseY;
 	private HashSet<Integer> pressedMouseButtons = new HashSet<>();
 	private boolean deltaInput = false;
@@ -37,7 +34,7 @@ public class ClientInput {
 		public void invoke(long window, double xpos, double ypos) {
 			mouseX = (float) xpos;
 			mouseY = (float) ypos;
-			if(enableMouseEvents)
+			if(!deltaInput)
 				client.mouseMoved(mouseX, mouseY);
 		}
 	};
@@ -47,12 +44,16 @@ public class ClientInput {
 		public void invoke(long window, int button, int action, int mods) {
 			if(action==GLFW_PRESS) {
 				pressedMouseButtons.add(button);
-				if(enableMouseEvents)
+				if(deltaInput)
+					client.mouseDown(-1, -1, button);
+				else
 					client.mouseDown(mouseX, mouseY, button);
 			}
 			else {
 				pressedMouseButtons.remove(button);
-				if(enableMouseEvents)
+				if(deltaInput)
+					client.mouseUp(-1, -1, button);
+				else
 					client.mouseUp(mouseX, mouseY, button);
 			}
 		}
@@ -61,7 +62,9 @@ public class ClientInput {
 	private GLFWScrollCallbackI mouseScrollCallback = new GLFWScrollCallbackI() {
 		@Override
 		public void invoke(long window, double xoffset, double yoffset) {
-			if(enableMouseEvents)
+			if(deltaInput)
+				client.mouseScroll(-1, -1, (float) -yoffset);
+			else
 				client.mouseScroll(mouseX, mouseY, (float) -yoffset);
 		}
 	};
@@ -84,7 +87,7 @@ public class ClientInput {
 				else if(action==GLFW_RELEASE)
 					pressedKeys.remove(code);
 			}
-			if(enableKeyboardEvents && (action==GLFW_PRESS || action==GLFW_REPEAT)) {
+			if(action==GLFW_PRESS || action==GLFW_REPEAT) {
 				pushKeyCode(code);
 			}
 		}
@@ -139,7 +142,6 @@ public class ClientInput {
 	public void setDeltaInput(boolean enable) {
 		if(deltaInput!=enable) {
 			this.deltaInput = enable;
-			this.enableMouseEvents = !enable;
 			glfwSetInputMode(window, GLFW_CURSOR, enable ? GLFW_CURSOR_DISABLED : GLFW_CURSOR_NORMAL);
 			cursorReset = false;
 		}

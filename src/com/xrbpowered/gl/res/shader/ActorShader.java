@@ -1,5 +1,6 @@
 package com.xrbpowered.gl.res.shader;
 
+import org.joml.Matrix4f;
 import org.lwjgl.opengl.GL20;
 
 import com.xrbpowered.gl.scene.Actor;
@@ -27,12 +28,12 @@ public class ActorShader extends CameraShader {
 		super.storeUniformLocations();
 		modelMatrixLocation = GL20.glGetUniformLocation(pId, "modelMatrix");
 	}
+
+	private static Matrix4f identity = new Matrix4f().identity();
 	
 	@Override
 	public void updateUniforms() {
-		if(actor==null)
-			return;
 		super.updateUniforms();
-		uniform(modelMatrixLocation, actor.getTransform());
+		uniform(modelMatrixLocation, actor!=null ? actor.getTransform() : identity);
 	}
 }
