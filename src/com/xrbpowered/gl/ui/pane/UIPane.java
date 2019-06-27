@@ -98,9 +98,11 @@ public class UIPane extends UITexture {
 	}
 	
 	public void render(RenderTarget target) {
-		if(requestRepaint)
-			updateBuffer();
-		pane.draw(target);
+		if(isVisible()) {
+			if(requestRepaint)
+				updateBuffer();
+			pane.draw(target);
+		}
 	}
 
 }

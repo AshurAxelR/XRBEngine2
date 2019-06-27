@@ -40,8 +40,10 @@ public class UINode extends UIContainer implements Renderer {
 	}
 	
 	public void render(RenderTarget target) {
-		for(UIElement c : children) {
-			((Renderer) c).render(target);
+		if(isVisible()) {
+			for(UIElement c : children) {
+				((Renderer) c).render(target);
+			}
 		}
 	}
 

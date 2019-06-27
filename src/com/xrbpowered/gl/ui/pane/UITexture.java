@@ -38,8 +38,10 @@ public class UITexture extends UINode {
 	}
 	
 	public void render(RenderTarget target) {
-		pane.draw(target);
-		super.render(target);
+		if(isVisible()) {
+			pane.draw(target);
+			super.render(target);
+		}
 	}
 	
 	@Override
