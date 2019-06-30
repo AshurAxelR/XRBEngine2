@@ -57,6 +57,14 @@ public class ActorPicker {
 		shader.use();
 	}
 	
+	public void startPickingTest(int x, int y, RenderTarget pickTarget) {
+		this.x = x;
+		this.y = y;
+		pickTarget.use();
+		GL11.glClear(GL11.GL_DEPTH_BUFFER_BIT);
+		shader.use();
+	}
+	
 	public void drawActor(StaticMeshActor actor, int objId) {
 		shader.updateUniforms(actor, objId);
 		actor.getMesh().draw(attribMask);

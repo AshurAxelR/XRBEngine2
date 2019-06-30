@@ -54,9 +54,9 @@ public class Actor {
 	
 	public static Matrix4f setTransform(Vector3f position, Vector3f scale, Vector3f rotation, Matrix4f m) {
 		m.identity();
-		m.scale(scale);
 		m.translate(position);
 		rotateYawPitchRoll(rotation, m);
+		m.scale(scale);
 		return m;
 	}
 	
