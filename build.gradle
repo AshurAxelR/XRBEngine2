@@ -1,0 +1,62 @@
+plugins {
+    id "java-library"
+    id "maven-publish"
+}
+
+version = "2.0"
+
+repositories {
+    mavenCentral()
+    mavenLocal()
+}
+
+ext {
+    lwjglVersion = "3.2.2"
+}
+
+sourceSets {
+    main {
+        java {
+            srcDirs = ["src"]
+        }
+    }
+}
+
+dependencies {
+    api("com.xrbpowered:zoom-ui:0.3.1")
+
+    api("org.joml:joml:1.9.16")
+
+    api("org.lwjgl:lwjgl:$lwjglVersion")
+    api("org.lwjgl:lwjgl:$lwjglVersion:natives-linux")
+    api("org.lwjgl:lwjgl:$lwjglVersion:natives-windows")
+    api("org.lwjgl:lwjgl:$lwjglVersion:natives-macos")
+
+    api("org.lwjgl:lwjgl-opengl:$lwjglVersion")
+    api("org.lwjgl:lwjgl-opengl:$lwjglVersion:natives-linux")
+    api("org.lwjgl:lwjgl-opengl:$lwjglVersion:natives-windows")
+    api("org.lwjgl:lwjgl-opengl:$lwjglVersion:natives-macos")
+
+    api("org.lwjgl:lwjgl-glfw:$lwjglVersion")
+    api("org.lwjgl:lwjgl-glfw:$lwjglVersion:natives-linux")
+    api("org.lwjgl:lwjgl-glfw:$lwjglVersion:natives-windows")
+    api("org.lwjgl:lwjgl-glfw:$lwjglVersion:natives-macos")
+}
+
+jar {
+    from("src/assets") {
+        into("assets")
+    }
+}
+
+publishing {
+    publications {
+        maven(MavenPublication) {
+            groupId = "com.xrbpowered"
+            artifactId = "xrbengine"
+            version = project.version
+
+            from components.java
+        }
+    }
+}
