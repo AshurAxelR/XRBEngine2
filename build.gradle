@@ -53,7 +53,7 @@ publishing {
     publications {
         maven(MavenPublication) {
             groupId = "com.xrbpowered"
-            artifactId = "xrbengine2"
+            artifactId = "xrbengine"
             version = project.version
 
             from components.java
