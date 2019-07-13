@@ -23,14 +23,16 @@ public class Actor {
 		return transform;
 	}
 	
+	private static Matrix4f m = new Matrix4f();
+	
 	public Vector4f calcViewPos(CameraActor camera, Vector4f p) {
 		if(p==null)
 			p = new Vector4f();
-		Matrix4f m = new Matrix4f(camera.getProjection()); // FIXME new
+		m.set(camera.getProjection());
 		m.mul(camera.getView());
 		m.mul(transform);
 		p.set(0f, 0f, 0f, 1f);
-		p = m.transform(p); // TODO check =
+		m.transform(p);
 		p.x /= p.w;
 		p.y /= p.w;
 		return p;
@@ -43,9 +45,7 @@ public class Actor {
 	}
 	
 	public float getDistTo(Actor actor) {
-		Vector3f d = new Vector3f(position); // FIXME new
-		d.sub(actor.position);
-		return d.length();
+		return position.distance(actor.position);
 	}
 	
 	protected static final Vector3f X_AXIS = new Vector3f(1, 0, 0);
