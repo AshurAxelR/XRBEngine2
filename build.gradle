@@ -23,7 +23,7 @@ sourceSets {
 }
 
 dependencies {
-    api("com.xrbpowered:zoom-ui:0.3.1")
+    api("com.xrbpowered:zoomui:0.3.1")
 
     api("org.joml:joml:1.9.16")
 
