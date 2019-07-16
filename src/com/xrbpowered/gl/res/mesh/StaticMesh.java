@@ -48,6 +48,8 @@ public class StaticMesh {
 		}
 		
 		create(info, vertexBuffer, indexBuffer, countElements, verticesPerElement, dynamic);
+		if(dynamic)
+			this.vertexBuffer = vertexBuffer;
 	}
 	
 	public StaticMesh(VertexInfo info, FloatBuffer vertexBuffer, ShortBuffer indexBuffer, int countElements, int verticesPerElement, boolean dynamic) {

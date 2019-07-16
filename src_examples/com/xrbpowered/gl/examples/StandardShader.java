@@ -84,7 +84,8 @@ public class StandardShader extends ActorShader {
 		super.updateUniforms();
 
 		model.set(camera.getView());
-		model.mul(actor.getTransform());
+		if(actor!=null)
+			model.mul(actor.getTransform());
 
 		norm._m00(model.m00());
 		norm._m01(model.m01());
