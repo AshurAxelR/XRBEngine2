@@ -185,7 +185,7 @@ public class Client {
 		glfwMakeContextCurrent(window);
 		glfwSwapInterval(vsync ? 1 : 0);
 
-		GL.createCapabilities();
+		GL.createCapabilities(true);
 
 		glfwSetWindowSizeCallback(window, windowSizeCallback);
 		glfwSetWindowCloseCallback(window, windowCloseCallback);

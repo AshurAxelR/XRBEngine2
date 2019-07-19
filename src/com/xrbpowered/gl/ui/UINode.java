@@ -1,6 +1,7 @@
 package com.xrbpowered.gl.ui;
 
 import com.xrbpowered.gl.client.Renderer;
+import com.xrbpowered.gl.client.UIClient;
 import com.xrbpowered.gl.res.buffer.RenderTarget;
 import com.xrbpowered.zoomui.UIContainer;
 import com.xrbpowered.zoomui.UIElement;
@@ -9,6 +10,10 @@ public class UINode extends UIContainer implements Renderer {
 
 	public UINode(UIContainer parent) {
 		super(parent);
+	}
+	
+	public UIClient getClient() {
+		return ((ClientWindow) getBase().getWindow()).client;
 	}
 
 	@Override

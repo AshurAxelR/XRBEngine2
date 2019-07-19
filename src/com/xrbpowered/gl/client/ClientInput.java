@@ -193,6 +193,9 @@ public class ClientInput {
 		return code!=null && pressedKeys.contains(code);
 	}
 
+	public boolean isAnyKeyDown() {
+		return !pressedKeys.isEmpty();
+	}
 
 	public static final int[] keyMap = {
 			/*0x00*/ 0, VK_ESCAPE, VK_1, VK_2, VK_3, VK_4, VK_5, VK_6,
