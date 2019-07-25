@@ -49,9 +49,9 @@ public class CameraActor extends Actor {
 		out.normalize();
 	}
 	
-	public void getDir(Vector3f out, int x, int y, int displayWidth, int displayHeight) {
+	public void getDir(Vector3f out, float x, float y, float displayWidth, float displayHeight) {
 		float mx = (x - displayWidth*0.5f) * (1f / displayWidth) / projection.m00();
-		float my = (y - displayHeight*0.5f) * (1f / displayWidth) / projection.m00();
+		float my = (displayHeight*0.5f - y) * (1f / displayWidth) / projection.m00();
 		out.set(
 			view.m02() - (view.m00() * mx + view.m01() * my) * 2f,
 			view.m12() - (view.m10() * mx + view.m11() * my) * 2f,

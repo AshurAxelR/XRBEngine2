@@ -40,12 +40,12 @@ public class ClientWindow extends UIWindow {
 
 	@Override
 	public int getClientWidth() {
-		return client.getWidth();
+		return client.getFrameWidth();
 	}
 
 	@Override
 	public int getClientHeight() {
-		return client.getHeight();
+		return client.getFrameHeight();
 	}
 
 	@Override

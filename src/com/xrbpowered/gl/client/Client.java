@@ -50,11 +50,11 @@ public class Client {
 	public final RenderTarget primaryBuffer = new RenderTarget(0, 0, 0) {
 		@Override
 		public int getWidth() {
-			return Client.this.getWidth();
+			return Client.this.getFrameWidth();
 		}
 		@Override
 		public int getHeight() {
-			return Client.this.getHeight();
+			return Client.this.getFrameHeight();
 		}
 	};
 	
@@ -259,7 +259,7 @@ public class Client {
 	 * Get primary OpenGL buffer width.
 	 * @return width in pixels.
 	 */
-	public int getWidth() {
+	public int getFrameWidth() {
 		return frameWidth;
 	}
 	
@@ -267,7 +267,7 @@ public class Client {
 	 * Get primary OpenGL buffer height.
 	 * @return height in pixels.
 	 */
-	public int getHeight() {
+	public int getFrameHeight() {
 		return frameHeight;
 	}
 	

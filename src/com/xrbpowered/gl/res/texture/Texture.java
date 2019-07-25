@@ -120,6 +120,7 @@ public class Texture {
 		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_WRAP_T, wrap ? GL11.GL_REPEAT : GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_MAG_FILTER, filter ? GL11.GL_LINEAR : GL11.GL_NEAREST);
 		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_MIN_FILTER, filter ? GL11.GL_LINEAR_MIPMAP_LINEAR : GL11.GL_NEAREST);
+		
 		if(filter) {
 			GL30.glGenerateMipmap(textureType);
 			if(anisotropy>1) {

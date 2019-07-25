@@ -12,15 +12,18 @@ import java.nio.IntBuffer;
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL12;
 import org.lwjgl.opengl.GL13;
+import org.lwjgl.opengl.GL30;
 
 public class BufferTexture extends Texture {
 
 	protected final boolean opaque;
+	protected final boolean filter;
 	protected final BufferedImage imgBuffer;
 	private final IntBuffer intBuffer;
 	
 	public BufferTexture(int w, int h, boolean opaque, boolean wrap, boolean filter) {
 		this.opaque = opaque;
+		this.filter = filter;
 		this.width = w;
 		this.height = h;
 		this.imgBuffer = new BufferedImage(width, height, opaque ? BufferedImage.TYPE_INT_RGB : BufferedImage.TYPE_INT_ARGB);
@@ -44,6 +47,8 @@ public class BufferTexture extends Texture {
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, getId());
 		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, opaque ? GL11.GL_RGB : GL11.GL_RGBA, width, height, 0, GL12.GL_BGRA, GL12.GL_UNSIGNED_BYTE, intBuffer);
+		if(filter)
+			GL30.glGenerateMipmap(GL11.GL_TEXTURE_2D);
 	}
 	
 	public static final Color CLEAR_COLOR = new Color(0, 0, 0, 0);

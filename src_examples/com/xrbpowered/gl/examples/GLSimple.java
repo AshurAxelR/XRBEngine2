@@ -34,7 +34,7 @@ public class GLSimple extends Client {
 	public void createResources() {
 		glClearColor(0.5f, 0.5f, 0.5f, 1f);
 		
-		camera = new CameraActor.Perspective().setAspectRatio(getWidth(), getHeight());
+		camera = new CameraActor.Perspective().setAspectRatio(getFrameWidth(), getFrameHeight());
 		camera.position = new Vector3f(0, 0, 3);
 		camera.updateTransform();
 		controller = new Controller(input).setActor(camera);
@@ -63,7 +63,7 @@ public class GLSimple extends Client {
 	
 	@Override
 	public void resizeResources() {
-		camera.setAspectRatio(getWidth(), getHeight());
+		camera.setAspectRatio(getFrameWidth(), getFrameHeight());
 	}
 	
 	@Override

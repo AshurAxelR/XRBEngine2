@@ -40,7 +40,7 @@ public class GLPoints extends Client {
 	public void createResources() {
 		glClearColor(0.5f, 0.5f, 0.5f, 1f);
 		
-		camera = new CameraActor.Perspective().setAspectRatio(getWidth(), getHeight());
+		camera = new CameraActor.Perspective().setAspectRatio(getFrameWidth(), getFrameHeight());
 		camera.position = new Vector3f(0, 0, 3);
 		camera.updateTransform();
 		controller = new Controller(input).setActor(camera);
@@ -76,7 +76,7 @@ public class GLPoints extends Client {
 				GL11.glBlendFunc(GL11.GL_SRC_ALPHA, GL11.GL_ONE_MINUS_SRC_ALPHA);
 				uniform(projectionMatrixLocation, camera.getProjection());
 				uniform(viewMatrixLocation, camera.getView());
-				GL20.glUniform1f(screenHeightLocation, getHeight());
+				GL20.glUniform1f(screenHeightLocation, getFrameHeight());
 			}
 			@Override
 			public void unuse() {
@@ -97,7 +97,7 @@ public class GLPoints extends Client {
 	
 	@Override
 	public void resizeResources() {
-		camera.setAspectRatio(getWidth(), getHeight());
+		camera.setAspectRatio(getFrameWidth(), getFrameHeight());
 	}
 	
 	@Override

@@ -51,6 +51,10 @@ public class Controller {
 		return this;
 	}
 	
+	public boolean isMouseLook() {
+		return mouseLook;
+	}
+	
 	protected void updateMove(Vector3f move) {
 		if(input.isKeyDown(keyForward))
 			move.z += 1;

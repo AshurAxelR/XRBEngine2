@@ -16,6 +16,7 @@ import com.xrbpowered.gl.res.shader.VertexInfo;
 public class StaticMesh {
 
 	private FloatBuffer vertexBuffer = null;
+	private ShortBuffer indexBuffer = null;
 
 	private int vaoId;
 	private int vboId;
@@ -48,8 +49,10 @@ public class StaticMesh {
 		}
 		
 		create(info, vertexBuffer, indexBuffer, countElements, verticesPerElement, dynamic);
-		if(dynamic)
+		if(dynamic) {
 			this.vertexBuffer = vertexBuffer;
+			this.indexBuffer = indexBuffer;
+		}
 	}
 	
 	public StaticMesh(VertexInfo info, FloatBuffer vertexBuffer, ShortBuffer indexBuffer, int countElements, int verticesPerElement, boolean dynamic) {
@@ -111,7 +114,16 @@ public class StaticMesh {
 		GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, vertexBuffer);
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
-	
+
+	public void updateIndexData(short[] indexData) {
+		indexBuffer.clear();
+		indexBuffer.put(indexData);
+		indexBuffer.flip();
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, vboiId);
+		GL15.glBufferSubData(GL15.GL_ELEMENT_ARRAY_BUFFER, 0, indexBuffer);
+		GL15.glBindBuffer(GL15.GL_ELEMENT_ARRAY_BUFFER, 0);
+	}
+
 	public void updateCountElements(int count) {
 		this.countElements = count;
 	}
