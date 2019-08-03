@@ -1,5 +1,6 @@
 package com.xrbpowered.gl.res.shader;
 
+import java.awt.Color;
 import java.io.IOException;
 import java.nio.FloatBuffer;
 
@@ -124,6 +125,10 @@ public abstract class Shader {
 	protected static void uniform(int location, Vector4f v) {
 		v.get(vec4Buffer);
 		GL20.glUniform4fv(location, vec4Buffer);
+	}
+
+	protected static void uniform(int location, Color c) {
+		GL20.glUniform4f(location, c.getRed()/255f, c.getGreen()/255f, c.getBlue()/255f, c.getAlpha()/255f);
 	}
 
 	private static final FloatBuffer vec3Buffer = BufferUtils.createFloatBuffer(3);
