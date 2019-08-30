@@ -32,9 +32,13 @@ public class UIOffscreen extends UINode {
 		if(width==getWidth() && height==getHeight())
 			return;
 		float pix = getPixelScale() * bufferScale;
-		OffscreenBuffer buffer = new OffscreenBuffer((int)(width/pix), (int)(height/pix), true);
+		OffscreenBuffer buffer = createOffscreenBuffer((int)(width/pix), (int)(height/pix));
 		pane.setBuffer(buffer);
 		super.setSize(width, height);
+	}
+	
+	protected OffscreenBuffer createOffscreenBuffer(int w, int h) {
+		return new OffscreenBuffer(w, h, true);
 	}
 	
 	protected void updatePaneBounds(GraphAssist g) {
@@ -58,8 +62,11 @@ public class UIOffscreen extends UINode {
 	}
 	
 	public void render(RenderTarget target) {
-		pane.getBuffer().use();
-		renderBuffer(pane.getBuffer());
+		OffscreenBuffer buffer = pane.getBuffer();
+		buffer.use();
+		renderBuffer(buffer);
+		buffer.resolve();
+		
 		target.use();
 		pane.draw(target);
 		super.render(target);

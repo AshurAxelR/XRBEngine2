@@ -38,6 +38,7 @@ public class Client {
 	public long noVsyncSleep = 12;
 	public int windowedWidth = 1600;
 	public int windowedHeight = 900;
+	public int multisample = 0;
 	
 	/**
 	 * User input manager.
@@ -169,6 +170,7 @@ public class Client {
 			glfwWindowHint(GLFW_DECORATED, GLFW_FALSE);
 		else
 			glfwWindowHint(GLFW_RESIZABLE, GLFW_TRUE);
+		glfwWindowHint(GLFW_SAMPLES, multisample);
 		
 		if(fullscreen) {
 			GLFWVidMode mode = glfwGetVideoMode(glfwGetPrimaryMonitor());

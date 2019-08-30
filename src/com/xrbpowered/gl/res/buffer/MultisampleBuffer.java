@@ -10,6 +10,8 @@ public class MultisampleBuffer extends OffscreenBuffer {
 	private int depthMSTexId;
 	private OffscreenBuffer resolve;
 	
+	// Important! Client.samples must be equal to samples parameter in order for MultisampleBuffer to work in LWJGL3
+	
 	public MultisampleBuffer(int w, int h, int samples, boolean hdr) {
 		super(GL30.glGenFramebuffers(), w, h);
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
