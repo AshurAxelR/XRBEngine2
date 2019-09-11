@@ -20,21 +20,30 @@ public class UIPane extends UITexture {
 		this.opaque = opaque;
 	}
 	
-	private BufferTexture createBuffer() {
+	private BufferTexture checkCreateBuffer() {
 		if(!((ClientWindow) getBase().getWindow()).client.hasContext())
 			return null;
+		
+		BufferTexture texture = (BufferTexture) pane.getTexture();
 		float pix = getPixelScale();
 		int w = (int)(getWidth()/pix);
 		int h = (int)(getHeight()/pix);
-		BufferTexture texture = new BufferTexture(w, h, opaque, false, false);
+		if(texture!=null && texture.getWidth()==w && texture.getHeight()==h)
+			return texture;
+		
+		// FIXME the following line causes blank texture, why?
+		// if(texture!=null) texture.release();
+		
+		texture = new BufferTexture(w, h, opaque, false, false);
 		setTexture(texture);
+		
 		return texture;
 	}
 	
 	protected void updateBuffer() {
-		BufferTexture texture = (BufferTexture) pane.getTexture();
+		BufferTexture texture = checkCreateBuffer();
 		if(texture==null)
-			texture = createBuffer();
+			return;
 		
 		GraphAssist gBuff = new GraphAssist(texture.startUpdate());
 		gBuff.graph.setRenderingHint(RenderingHints.KEY_TEXT_ANTIALIASING, RenderingHints.VALUE_TEXT_ANTIALIAS_LCD_HRGB);
@@ -53,14 +62,6 @@ public class UIPane extends UITexture {
 	@Override
 	public void repaint() {
 		requestRepaint = true;
-	}
-	
-	@Override
-	public void setSize(float width, float height) {
-		if(width==getWidth() && height==getHeight())
-			return;
-		super.setSize(width, height);
-		createBuffer();
 	}
 	
 	@Override
