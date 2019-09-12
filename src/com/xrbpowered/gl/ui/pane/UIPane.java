@@ -24,18 +24,17 @@ public class UIPane extends UITexture {
 		if(!((ClientWindow) getBase().getWindow()).client.hasContext())
 			return null;
 		
-		BufferTexture texture = (BufferTexture) pane.getTexture();
+		BufferTexture old = (BufferTexture) pane.getTexture();
 		float pix = getPixelScale();
 		int w = (int)(getWidth()/pix);
 		int h = (int)(getHeight()/pix);
-		if(texture!=null && texture.getWidth()==w && texture.getHeight()==h)
-			return texture;
+		if(old!=null && old.getWidth()==w && old.getHeight()==h)
+			return old;
 		
-		// FIXME the following line causes blank texture, why?
-		// if(texture!=null) texture.release();
-		
-		texture = new BufferTexture(w, h, opaque, false, false);
+		BufferTexture texture = new BufferTexture(w, h, opaque, false, false);
 		setTexture(texture);
+		if(old!=null)
+			old.release(); // glDeleteTextures must go after glGenTextures to avoid bad behaviour due to id recycling
 		
 		return texture;
 	}
