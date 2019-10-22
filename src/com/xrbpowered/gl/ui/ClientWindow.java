@@ -1,8 +1,11 @@
 package com.xrbpowered.gl.ui;
 
 import java.awt.Cursor;
+import java.awt.Font;
+import java.awt.FontMetrics;
 
 import com.xrbpowered.gl.client.UIClient;
+import com.xrbpowered.gl.res.texture.ImageBuffer;
 import com.xrbpowered.zoomui.BaseContainer;
 import com.xrbpowered.zoomui.UIModalWindow;
 import com.xrbpowered.zoomui.UIModalWindow.ResultHandler;
@@ -103,6 +106,15 @@ public class ClientWindow extends UIWindow {
 	@Override
 	public void setCursor(Cursor cursor) {
 		// change cursor
+	}
+
+	private static ImageBuffer offscreenGraphics = null;
+	
+	@Override
+	public FontMetrics getFontMetrics(Font font) {
+		if(offscreenGraphics==null)
+			offscreenGraphics = new ImageBuffer(1, 1, true);
+		return offscreenGraphics.getGraphics().getFontMetrics(font);
 	}
 
 }
