@@ -71,8 +71,10 @@ public class ActorPicker {
 	}
 
 	public void drawSceneMesh(StaticMesh mesh, int objId) {
-		shader.updateUniforms(null, objId);
-		mesh.draw(attribMask);
+		if(mesh!=null) {
+			shader.updateUniforms(null, objId);
+			mesh.draw(attribMask);
+		}
 	}
 
 	public int finishPicking(RenderTarget nextTarget) {
