@@ -24,7 +24,7 @@ public class TexturePane extends Pane {
 	}
 	
 	@Override
-	protected void bindTexture(int index) {
+	public void bindTexture(int index) {
 		texture.bind(0);
 	}
 	

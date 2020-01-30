@@ -71,6 +71,10 @@ public class CameraActor extends Actor {
 			return this;
 		}
 		
+		public float getFov() {
+			return fov;
+		}
+		
 		@Override
 		public Perspective setAspectRatio(float aspectRatio) {
 			super.setAspectRatio(aspectRatio);
@@ -83,6 +87,14 @@ public class CameraActor extends Actor {
 			this.far = far;
 			updateTransform();
 			return this;
+		}
+		
+		public float getNear() {
+			return near;
+		}
+		
+		public float getFar() {
+			return far;
 		}
 		
 		@Override

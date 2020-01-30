@@ -17,7 +17,7 @@ public abstract class Pane {
 	public Pane() {
 	}
 	
-	protected abstract void bindTexture(int index);
+	public abstract void bindTexture(int index);
 	
 	public Pane setAnchor(int x, int y) {
 		this.x = x;

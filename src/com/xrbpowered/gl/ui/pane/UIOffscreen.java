@@ -62,14 +62,16 @@ public class UIOffscreen extends UINode {
 	}
 	
 	public void render(RenderTarget target) {
-		OffscreenBuffer buffer = pane.getBuffer();
-		buffer.use();
-		renderBuffer(buffer);
-		buffer.resolve();
-		
-		target.use();
-		pane.draw(target);
-		super.render(target);
+		if(isVisible()) {
+			OffscreenBuffer buffer = pane.getBuffer();
+			buffer.use();
+			renderBuffer(buffer);
+			buffer.resolve();
+			
+			target.use();
+			pane.draw(target);
+			super.render(target);
+		}
 	}
 	
 	@Override

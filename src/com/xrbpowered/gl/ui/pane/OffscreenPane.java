@@ -25,7 +25,7 @@ public class OffscreenPane extends Pane {
 	}
 	
 	@Override
-	protected void bindTexture(int index) {
+	public void bindTexture(int index) {
 		buffer.bindColorBuffer(index);
 	}
 	
