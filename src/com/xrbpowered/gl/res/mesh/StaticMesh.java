@@ -128,6 +128,10 @@ public class StaticMesh {
 		this.countElements = count;
 	}
 	
+	public int countElements() {
+		return countElements;
+	}
+	
 	public int countTris() {
 		return countElements / 3;
 	}
