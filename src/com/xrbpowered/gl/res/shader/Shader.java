@@ -74,7 +74,11 @@ public abstract class Shader {
 	}
 	
 	protected int bindAttribLocations() {
-		return (info==null) ? 0 : info.bindAttribLocations(pId);
+		return bindAttribLocations(this.info, 0);
+	}
+	
+	protected int bindAttribLocations(VertexInfo info, int start) {
+		return (info==null) ? 0 : info.bindAttribLocations(pId, start);
 	}
 	
 	protected void initSamplers(String[] names) {

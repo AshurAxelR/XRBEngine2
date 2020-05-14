@@ -29,7 +29,7 @@ public class FastMeshBuilder extends MeshBuilder {
 	
 	public FastMeshBuilder(VertexInfo info, Options options, int numVertices, int numIndices) {
 		super(info, options);
-		this.vertexData = new float[numVertices * info.getSkip()];
+		this.vertexData = info.createData(numVertices);
 		this.indexData = new short[numIndices];
 	}
 

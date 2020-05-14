@@ -3,41 +3,33 @@ package com.xrbpowered.gl.res.shader;
 import java.nio.FloatBuffer;
 
 import org.lwjgl.BufferUtils;
-import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL15;
 import org.lwjgl.opengl.GL20;
-import org.lwjgl.opengl.GL33;
 
 public class InstanceBuffer {
 
 	private FloatBuffer instanceBuffer = null;
 	
-	private int divisor;
-	private int attribId;
-	private int[] elemCount;
-	private int stride;
+	public final int startAttrib;
+	public final VertexInfo instInfo;
 	private int iboId;
 	
-	public InstanceBuffer(int divisor, int count, int attribId, int[] elemCount) {
-		this.divisor = divisor;
-		this.attribId = attribId;
-		this.elemCount = elemCount;
-		stride = 0;
-		for(int i=0; i<elemCount.length; i++) {
-			stride += 4 * elemCount[i];
-		}
-		instanceBuffer = BufferUtils.createByteBuffer(count * stride).asFloatBuffer();
+	public InstanceBuffer(int maxCount, int startAttrib, VertexInfo instInfo) {
+		this.startAttrib = startAttrib;
+		this.instInfo = instInfo;
+		int size = maxCount * instInfo.getStride();
+		instanceBuffer = BufferUtils.createByteBuffer(size).asFloatBuffer();
 		
 		iboId = GL15.glGenBuffers();
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, iboId);
-		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, count * stride, GL15.GL_STATIC_DRAW);
+		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, size, GL15.GL_STATIC_DRAW);
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
-	
-	public InstanceBuffer(int divisor, int count, int attribId, int elemCount) {
-		this(divisor, count, attribId, new int[] {elemCount});
+
+	public InstanceBuffer(int maxCount, VertexInfo instInfo) {
+		this(maxCount, instInfo.start, instInfo);
 	}
-	
+
 	public static int bindAttribLocations(Shader shader, int startIndex, String[] names) {
 		for(int i=0; i<names.length; i++)
 			GL20.glBindAttribLocation(shader.pId, i+startIndex, names[i]);
@@ -46,7 +38,7 @@ public class InstanceBuffer {
 	
 	public void updateInstanceData(float[] instanceData, int count) {
 		instanceBuffer.clear();
-		instanceBuffer.put(instanceData, 0, count * stride / 4);
+		instanceBuffer.put(instanceData, 0, count * instInfo.getSkip());
 		instanceBuffer.flip();
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, iboId);
 		GL15.glBufferSubData(GL15.GL_ARRAY_BUFFER, 0, instanceBuffer);
@@ -54,22 +46,14 @@ public class InstanceBuffer {
 	}
 	
 	public void enable() {
-		int offs = 0;
-		for(int i=0; i<elemCount.length; i++) {
-			GL20.glEnableVertexAttribArray(attribId+i);
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, iboId);
-			GL20.glVertexAttribPointer(attribId+i, elemCount[i], GL11.GL_FLOAT, false, stride, offs);
-			offs += 4 * elemCount[i];
-			GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-			GL33.glVertexAttribDivisor(attribId+i, divisor);
-//			GL20.glGetVertexAttrib(attribId, GL33.GL_VERTEX_ATTRIB_ARRAY_DIVISOR, testParam);
-		}
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, iboId);
+		instInfo.enableAttribs();
+		instInfo.initAttribPointers(1);
+		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
 	}
 	
 	public void disable() {
-		for(int i=0; i<elemCount.length; i++)
-			GL20.glDisableVertexAttribArray(attribId+i);
-		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
+		instInfo.disableAttribs();
 	}
 	
 	public void release() {

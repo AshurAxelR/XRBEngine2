@@ -34,7 +34,7 @@ public class Controller {
 	protected Vector3f velocity = new Vector3f();
 	
 	protected Vector4f moveVectorScale = new Vector4f(1f, 1f, 1f, 1f); /* strafe, fly, fwd, back */
-	protected boolean lookAlign = true;
+	public boolean lookAlign = true;
 	
 	public Controller(ClientInput input) {
 		this.input = input;
