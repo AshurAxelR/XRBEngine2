@@ -73,7 +73,12 @@ public class GLWindow {
 			if(key == GLFW_KEY_ESCAPE && action == GLFW_PRESS)
 				glfwSetWindowShouldClose(window, true); // We will detect this in the rendering loop
 			else if(key == GLFW_KEY_ENTER && action == GLFW_PRESS) {
-				toggleFullscreen = true;
+				//toggleFullscreen = true;
+				fullscreen = !fullscreen;
+				toggleFullscreen = false;
+				glfwFreeCallbacks(window);
+				glfwDestroyWindow(window);
+				init();
 			}
 		});
 
@@ -129,13 +134,13 @@ public class GLWindow {
 			// Poll for window events. The key callback above will only be
 			// invoked during this call.
 			glfwPollEvents();
-			if(toggleFullscreen) {
+			/*if(toggleFullscreen) {
 				fullscreen = !fullscreen;
 				toggleFullscreen = false;
 				glfwFreeCallbacks(window);
 				glfwDestroyWindow(window);
 				init();
-			}
+			}*/
 		}
 	}
 

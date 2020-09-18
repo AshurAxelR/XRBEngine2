@@ -8,6 +8,7 @@ import com.xrbpowered.gl.client.UIClient;
 import com.xrbpowered.gl.res.texture.ImageBuffer;
 import com.xrbpowered.zoomui.BaseContainer;
 import com.xrbpowered.zoomui.UIModalWindow;
+import com.xrbpowered.zoomui.UIPopupWindow;
 import com.xrbpowered.zoomui.UIModalWindow.ResultHandler;
 import com.xrbpowered.zoomui.UIWindow;
 import com.xrbpowered.zoomui.UIWindowFactory;
@@ -21,6 +22,10 @@ public class ClientWindow extends UIWindow {
 		}
 		@Override
 		public <A> UIModalWindow<A> createModal(String title, int w, int h, boolean canResize, ResultHandler<A> onResult) {
+			throw new UnsupportedOperationException();
+		}
+		@Override
+		public UIPopupWindow createPopup() {
 			throw new UnsupportedOperationException();
 		}
 		@Override
@@ -74,6 +79,11 @@ public class ClientWindow extends UIWindow {
 		client.centerWindow();
 	}
 
+	@Override
+	public boolean isVisible() {
+		return true;
+	}
+	
 	@Override
 	public void show() {
 	}
