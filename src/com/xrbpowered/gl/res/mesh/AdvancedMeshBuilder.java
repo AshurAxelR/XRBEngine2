@@ -22,8 +22,9 @@ public class AdvancedMeshBuilder extends MeshBuilder {
 		}
 		
 		@Override
-		protected void set(Attribute attrib, int offs, float x) {
+		public Vertex set(Attribute attrib, int offs, float x) {
 			MeshBuilder.setData(info, attrib, offs, data, 0, x);
+			return this;
 		}
 		
 		public void put(FloatBuffer buf) {
@@ -38,6 +39,14 @@ public class AdvancedMeshBuilder extends MeshBuilder {
 		public abstract int verticesPerElement();
 		public abstract void putIndices(ShortBuffer buf);
 		public abstract int putIndices(short[] buf, int start);
+		
+		public boolean isValid() {
+			for(Vertex v : vertices) {
+				if(v==null)
+					return false;
+			}
+			return true;
+		}
 		
 		public Face setNormals(Vector3f norm) {
 			for(Vertex v : vertices)
@@ -180,6 +189,8 @@ public class AdvancedMeshBuilder extends MeshBuilder {
 	}
 
 	public Face add(Face f) {
+		if(!f.isValid())
+			return null;
 		faces.add(f);
 		return f;
 	}

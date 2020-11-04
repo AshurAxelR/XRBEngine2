@@ -16,8 +16,9 @@ public class FastMeshBuilder extends MeshBuilder {
 		}
 		
 		@Override
-		protected void set(Attribute attrib, int offs, float x) {
+		public Vertex set(Attribute attrib, int offs, float x) {
 			MeshBuilder.setData(info, attrib, offs, vertexData, index, x);
+			return this;
 		}
 	}
 	

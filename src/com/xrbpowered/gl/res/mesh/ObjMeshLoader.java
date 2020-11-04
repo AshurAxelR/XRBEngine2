@@ -2,6 +2,7 @@ package com.xrbpowered.gl.res.mesh;
 
 import java.util.ArrayList;
 import java.util.HashMap;
+import java.util.LinkedHashMap;
 import java.util.Scanner;
 
 import org.joml.Vector2f;
@@ -12,35 +13,39 @@ import com.xrbpowered.gl.res.mesh.AdvancedMeshBuilder.Vertex;
 import com.xrbpowered.gl.res.shader.VertexInfo;
 
 public class ObjMeshLoader {
-	private static final float NORM_EPSILON = 0.01f;
+	protected static final float NORM_EPSILON = 0.01f;
 
-	private ArrayList<Vector3f> v = new ArrayList<>();
-	private ArrayList<Vector2f> vt = new ArrayList<>();
-	private ArrayList<Vector3f> vn = new ArrayList<>();
-
-	private AdvancedMeshBuilder builder;
-	private HashMap<String, Vertex> indexMap = new HashMap<>();
+	protected int maxVertexArgs = 4;
+	protected int maxLineArgs = 4;
 	
-	private final float scale;
+	protected ArrayList<Vector3f> v = new ArrayList<>();
+	protected ArrayList<Vector2f> vt = new ArrayList<>();
+	protected ArrayList<Vector3f> vn = new ArrayList<>();
 
-	private ObjMeshLoader(AdvancedMeshBuilder builder, float scale) {
-		this.builder = builder;
+	protected AdvancedMeshBuilder builder;
+	protected HashMap<String, Vertex> indexMap = new HashMap<>();
+	
+	protected final float scale;
+
+	protected String objectName = null;
+
+	protected ObjMeshLoader(float scale) {
 		this.scale = scale;
 	}
 	
-	private static Vector2f vec2(String[] s) {
+	protected static Vector2f vec2(String[] s) {
 		return new Vector2f(Float.parseFloat(s[1]), 1f-Float.parseFloat(s[2]));
 	}
 
-	private static Vector3f vec3(String[] s) {
+	protected static Vector3f vec3(String[] s) {
 		return new Vector3f(Float.parseFloat(s[1]), Float.parseFloat(s[2]), Float.parseFloat(s[3]));
 	}
 	
-	private Vertex getVertex(String sv) {
+	protected Vertex getVertex(String sv) {
 		Vertex v = indexMap.get(sv);
 		if(v==null) {
 			v = builder.addVertex(); 
-			String[] s = sv.split("\\/", 4);
+			String[] s = sv.split("\\/", maxVertexArgs);
 			v.setPosition(this.v.get(Integer.parseInt(s[0])-1));
 			if(s.length>1 && !s[1].isEmpty())
 				v.setTexCoord(this.vt.get(Integer.parseInt(s[1])-1));
@@ -52,73 +57,159 @@ public class ObjMeshLoader {
 				else
 					v.setTangent(new Vector3f(1, 0, 0));
 			}
-			// FIXME tangents
+			indexMap.put(sv, v);
 		}
 		return v;
 	}
 	
-	private StaticMesh load(Scanner in) {
+	protected Vector3f adjustPosition(Vector3f v) {
+		return v.mul(scale);
+	}
+
+	protected Vector3f adjustNormal(Vector3f vn) {
+		return vn;
+	}
+
+	protected Vector2f adjustTexCoord(Vector2f vt) {
+		return vt;
+	}
+	
+	protected void loadLine(String[] s, boolean skip) {
+		if("v".equals(s[0]))
+			v.add(skip ? null : adjustPosition(vec3(s)));
+		else if("vn".equals(s[0]))
+			vn.add(skip ? null : adjustNormal(vec3(s)));
+		else if("vt".equals(s[0]))
+			vt.add(skip ? null : adjustTexCoord(vec2(s)));
+		else if("f".equals(s[0]) && !skip) {
+			if(s.length==4)
+				builder.add(new AdvancedMeshBuilder.Triangle(getVertex(s[1]), getVertex(s[2]), getVertex(s[3])) /*.calcTangents()*/ );
+			else if(s.length==5)
+				builder.add(new AdvancedMeshBuilder.Quad(getVertex(s[1]), getVertex(s[2]), getVertex(s[3]), getVertex(s[4])) /*.calcTangents()*/ );
+			else if(s.length==3)
+				builder.add(new AdvancedMeshBuilder.Edge(getVertex(s[1]), getVertex(s[2])));
+			else throw new RuntimeException("Unknown face type; can do only edges, tris, and quads.");
+		}
+	}
+
+	protected AdvancedMeshBuilder load(Scanner in, boolean skip) {
 		while(in.hasNextLine()) {
-			String[] s = in.nextLine().split("\\s+", 6);
-			if("v".equals(s[0]))
-				v.add(((Vector3f) vec3(s)).mul(scale));
-			else if("vn".equals(s[0]))
-				vn.add(vec3(s));
-			else if("vt".equals(s[0]))
-				vt.add(vec2(s));
-			else if("f".equals(s[0])) {
-				if(s.length==4)
-					builder.add(new AdvancedMeshBuilder.Triangle(getVertex(s[1]), getVertex(s[2]), getVertex(s[3])) /*.calcTangents()*/ );
-				else if(s.length==5)
-					builder.add(new AdvancedMeshBuilder.Quad(getVertex(s[1]), getVertex(s[2]), getVertex(s[3]), getVertex(s[4])) /*.calcTangents()*/ );
-				else if(s.length==3)
-					builder.add(new AdvancedMeshBuilder.Edge(getVertex(s[1]), getVertex(s[2])));
-				else throw new RuntimeException("Unknown face type, can do only tris and quads.");
+			String[] s = in.nextLine().split("\\s+", maxLineArgs);
+			if("o".equals(s[0])) {
+				objectName = s[1];
+				return builder;
 			}
-			else if("o".equals(s[0]))
-				break;
+			else {
+				loadLine(s, skip);
+			}
 		}
-		return builder.create();
+		objectName = null;
+		return builder;
 	}
 	
-	private static void skip(Scanner in) {
-		while(in.hasNextLine()) {
-			String[] s = in.nextLine().split("\\s+", 2);
-			if("o".equals(s[0]))
-				break;
-		}
+	protected void setBuilder(AdvancedMeshBuilder builder) {
+		this.builder = builder;
+		this.indexMap.clear();
 	}
 	
-	public static StaticMesh[] loadAll(String path, float scale, VertexInfo info, MeshBuilder.Options options) {
+	protected AdvancedMeshBuilder load(Scanner in, AdvancedMeshBuilder builder) {
+		setBuilder(builder);
+		return load(in, false);
+	}
+	
+	protected String skip(Scanner in) {
+		load(in, true);
+		return objectName;
+	}
+	
+	public LinkedHashMap<String, AdvancedMeshBuilder> loadBuilders(Scanner in, VertexInfo info, MeshBuilder.Options options) {
 		try {
-			ArrayList<StaticMesh> meshes = new ArrayList<>();
-			Scanner in = new Scanner(AssetManager.defaultAssets.openStream(path));
-			skip(in);
-			for(;;) {
-				StaticMesh m = new ObjMeshLoader(new AdvancedMeshBuilder(info, options), scale).load(in);
-				if(m==null)
-					return meshes.toArray(null);
-				else
-					meshes.add(m);
+			LinkedHashMap<String, AdvancedMeshBuilder> builders = new LinkedHashMap<>();
+			String name = skip(in);
+			while(name!=null) {
+				AdvancedMeshBuilder b = load(in, new AdvancedMeshBuilder(info, options));
+				builders.put(name, b);
+				name = objectName;
 			}
+			return builders;
 		}
 		catch(Exception e) {
 			e.printStackTrace();
 			return null;
 		}
+	}
+	
+	public StaticMesh loadObj(Scanner in, String objName, VertexInfo info, MeshBuilder.Options options) {
+		try {
+			String name = skip(in);
+			while(name!=null && !objName.equals(name))
+				name = skip(in);
+			StaticMesh m = load(in, new AdvancedMeshBuilder(info, options)).create();
+			return m;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public StaticMesh loadObj(Scanner in, int objIndex, VertexInfo info, MeshBuilder.Options options) {
+		try {
+			for(int i=0; i<objIndex+1; i++)
+				skip(in);
+			StaticMesh m = load(in, new AdvancedMeshBuilder(info, options)).create();
+			return m;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public LinkedHashMap<String, AdvancedMeshBuilder> loadBuilders(String path, VertexInfo info, MeshBuilder.Options options) {
+		try {
+			Scanner in = new Scanner(AssetManager.defaultAssets.openStream(path));
+			LinkedHashMap<String, AdvancedMeshBuilder> builders = loadBuilders(in, info, options);
+			in.close();
+			return builders;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public StaticMesh loadObj(String path, String objName, VertexInfo info, MeshBuilder.Options options) {
+		try {
+			Scanner in = new Scanner(AssetManager.defaultAssets.openStream(path));
+			StaticMesh m = loadObj(in, objName, info, options);
+			in.close();
+			return m;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public StaticMesh loadObj(String path, int objIndex, VertexInfo info, MeshBuilder.Options options) {
+		try {
+			Scanner in = new Scanner(AssetManager.defaultAssets.openStream(path));
+			StaticMesh m = loadObj(in, objIndex, info, options);
+			in.close();
+			return m;
+		}
+		catch(Exception e) {
+			e.printStackTrace();
+			return null;
+		}
+	}
+	
+	public static StaticMesh loadObj(String path, String objName, float scale, VertexInfo info, MeshBuilder.Options options) {
+		return new ObjMeshLoader(scale).loadObj(path, objName, info, options);
 	}
 	
 	public static StaticMesh loadObj(String path, int objIndex, float scale, VertexInfo info, MeshBuilder.Options options) {
-		try {
-			Scanner in = new Scanner(AssetManager.defaultAssets.openStream(path));
-			for(int i=0; i<objIndex+1; i++)
-				skip(in);
-			return new ObjMeshLoader(new AdvancedMeshBuilder(info, options), scale).load(in);
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		return new ObjMeshLoader(scale).loadObj(path, objIndex, info, options);
 	}
-	
 }
