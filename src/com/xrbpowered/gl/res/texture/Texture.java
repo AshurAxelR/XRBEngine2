@@ -110,6 +110,13 @@ public class Texture {
 		GL11.glDeleteTextures(texId);
 	}
 
+	public static void bindAll(Texture[] textures) {
+		if(textures!=null) {
+			for(int i=0; i<textures.length; i++)
+				textures[i].bind(i);
+		}
+	}
+	
 	public static void unbind(int index) {
 		GL13.glActiveTexture(GL13.GL_TEXTURE0 + index);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);

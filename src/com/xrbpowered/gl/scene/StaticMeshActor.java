@@ -6,9 +6,9 @@ import com.xrbpowered.gl.res.texture.Texture;
 
 public class StaticMeshActor extends Actor {
 
-	private StaticMesh mesh = null;
-	private ActorShader shader = null;
-	private Texture[] textures = null;
+	protected StaticMesh mesh = null;
+	protected ActorShader shader = null;
+	protected Texture[] textures = null;
 	
 	public void setMesh(StaticMesh mesh) {
 		this.mesh = mesh;
@@ -35,10 +35,7 @@ public class StaticMeshActor extends Actor {
 			return;
 		shader.setActor(this);
 		shader.use();
-		if(textures!=null) {
-			for(int i=0; i<textures.length; i++)
-				textures[i].bind(i);
-		}
+		Texture.bindAll(textures);
 		mesh.draw();
 		shader.unuse();
 	}
