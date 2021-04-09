@@ -112,8 +112,12 @@ public class Texture {
 
 	public static void bindAll(Texture[] textures) {
 		if(textures!=null) {
-			for(int i=0; i<textures.length; i++)
-				textures[i].bind(i);
+			for(int i=0; i<textures.length; i++) {
+				if(textures[i]!=null)
+					textures[i].bind(i);
+				else
+					unbind(i);
+			}
 		}
 	}
 	
