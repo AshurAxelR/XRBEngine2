@@ -257,12 +257,12 @@ public class FastMeshBuilder extends MeshBuilder {
 			for(j=0; j<=segm; j++) {
 				Vertex vertex = mb.getVertex(index);
 				float r0 = r * sin[j];
-				v.y = -r * cos[j];
-				v.x = r0 * cos[i];
+				v.y = r * cos[j];
+				v.x = -r0 * cos[i];
 				v.z = r0 * sin[i];
 				vertex.setPosition(v);
 				vertex.setNormal(v.x/r, v.y/r, v.z/r);
-				vertex.setTangent((r0>0f) ? -v.z/r0 : v.y/r, 0, (r0>0f) ? v.x/r0 : v.y/r);
+				vertex.setTangent((r0>0f) ? v.z/r0 : v.y/r, 0, (r0>0f) ? v.x/r0 : v.y/r);
 				vertex.setTexCoord(i / (float) segm, j / (float) segm);
 				index++;
 			}
