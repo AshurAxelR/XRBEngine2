@@ -8,6 +8,8 @@ import org.lwjgl.opengl.GL13;
 import org.lwjgl.opengl.GL14;
 import org.lwjgl.opengl.GL30;
 
+import com.xrbpowered.gl.res.texture.Texture;
+
 public class OffscreenBuffer extends RenderTarget {
 
 	protected int colorTexId;
@@ -78,13 +80,30 @@ public class OffscreenBuffer extends RenderTarget {
 			GL11.glBindTexture(GL11.GL_TEXTURE_2D, depthTexId);
 		}
 	}
+	
+	public Texture colorToTexture() {
+		return colorTexId>0 ? new Texture(getWidth(), getHeight(), colorTexId) : null;
+	}
 
+	public Texture depthToTexture() {
+		return depthTexId>0 ? new Texture(getWidth(), getHeight(), depthTexId) : null;
+	}
+
+	public void release(boolean keepColor, boolean keepDepth) {
+		GL30.glDeleteFramebuffers(fbo);
+		if(!keepColor && colorTexId>0) {
+			GL11.glDeleteTextures(colorTexId);
+			colorTexId = 0;
+		}
+		if(!keepDepth && depthTexId>0) {
+			GL11.glDeleteTextures(depthTexId);
+			depthTexId = 0;
+		}
+	}
+	
 	@Override
 	public void release() {
-		GL30.glDeleteFramebuffers(fbo);
-		GL11.glDeleteTextures(colorTexId);
-		if(depthTexId>0)
-			GL11.glDeleteTextures(depthTexId);
+		release(false, false);
 	}
 	
 }

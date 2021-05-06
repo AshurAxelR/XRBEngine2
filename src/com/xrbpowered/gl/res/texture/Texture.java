@@ -37,6 +37,12 @@ public class Texture {
 		return buf;
 	}
 
+	public Texture(int w, int h, int texId) {
+		this.width = w;
+		this.height = h;
+		this.texId = texId;
+	}
+	
 	public Texture(String path, boolean wrap, boolean filter) {
 		try {
 			BufferedImage img = AssetManager.defaultAssets.loadImage(path);

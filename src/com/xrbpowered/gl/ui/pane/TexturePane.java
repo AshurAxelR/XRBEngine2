@@ -18,8 +18,8 @@ public class TexturePane extends Pane {
 	}
 	
 	public void setTexture(Texture texture) {
-		if(this.texture!=null)
-			this.texture.release();
+		// if(this.texture!=null)
+		//	this.texture.release();
 		this.texture = texture;
 	}
 	
