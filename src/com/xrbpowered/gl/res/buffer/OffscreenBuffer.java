@@ -19,20 +19,24 @@ public class OffscreenBuffer extends RenderTarget {
 		super(fbo, w, h);
 	}
 	
-	public OffscreenBuffer(int w, int h, boolean depthBuffer, boolean hdr) {
+	public OffscreenBuffer(int w, int h, boolean depthBuffer, boolean hdr, boolean alpha) {
 		super(GL30.glGenFramebuffers(), w, h);
 		GL30.glBindFramebuffer(GL30.GL_FRAMEBUFFER, fbo);
-		create(w, h, depthBuffer, hdr);
+		create(w, h, depthBuffer, hdr, alpha);
+	}
+
+	public OffscreenBuffer(int w, int h, boolean depthBuffer, boolean hdr) {
+		this(w, h, depthBuffer, hdr, false);
 	}
 
 	public OffscreenBuffer(int w, int h, boolean depthBuffer) {
-		this(w, h, depthBuffer, false);
+		this(w, h, depthBuffer, false, false);
 	}
 
-	protected void create(int w, int h, boolean depthBuffer, boolean hdr) {
+	protected void create(int w, int h, boolean depthBuffer, boolean hdr, boolean alpha) {
 		colorTexId = GL11.glGenTextures();
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, colorTexId);
-		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, hdr ? GL30.GL_RGB16F : GL11.GL_RGB, w, h, 0, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
+		GL11.glTexImage2D(GL11.GL_TEXTURE_2D, 0, getInternalFormat(hdr, alpha), w, h, 0, GL11.GL_RGB, GL11.GL_UNSIGNED_BYTE, (ByteBuffer) null);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_S, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_WRAP_T, GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(GL11.GL_TEXTURE_2D, GL11.GL_TEXTURE_MIN_FILTER, GL11.GL_NEAREST); //GL11.GL_LINEAR);
@@ -104,6 +108,13 @@ public class OffscreenBuffer extends RenderTarget {
 	@Override
 	public void release() {
 		release(false, false);
+	}
+	
+	public static int getInternalFormat(boolean hdr, boolean alpha) {
+		if(alpha)
+			return hdr ? GL30.GL_RGBA16F : GL11.GL_RGBA;
+		else
+			return hdr ? GL30.GL_RGB16F : GL11.GL_RGB;
 	}
 	
 }

@@ -4,6 +4,7 @@ import static org.lwjgl.opengl.GL11.*;
 
 import java.awt.Color;
 
+import com.xrbpowered.gl.res.buffer.RenderTarget;
 import com.xrbpowered.gl.ui.ClientBaseContainer;
 import com.xrbpowered.gl.ui.ClientWindow;
 import com.xrbpowered.gl.ui.pane.PaneShader;
@@ -54,7 +55,7 @@ public class UIClient extends Client {
 
 	@Override
 	public void render(float dt) {
-		glClearColor(clearColor.getRed()/255f, clearColor.getGreen()/255f, clearColor.getBlue()/255f, 0.0f);
+		RenderTarget.setClearColor(clearColor);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 		getContainer().updateTime(dt);
 		getContainer().render(primaryBuffer);

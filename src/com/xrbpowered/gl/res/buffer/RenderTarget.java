@@ -1,5 +1,9 @@
 package com.xrbpowered.gl.res.buffer;
 
+import static org.lwjgl.opengl.GL11.glClearColor;
+
+import java.awt.Color;
+
 import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL30;
 
@@ -48,6 +52,10 @@ public abstract class RenderTarget {
 		int status = GL30.glCheckFramebufferStatus(GL30.GL_FRAMEBUFFER);
 		if(status != GL30.GL_FRAMEBUFFER_COMPLETE)
 			throw new RuntimeException(String.format("Framebuffer not complete: %04X", status));
+	}
+	
+	public static void setClearColor(Color color) {
+		glClearColor(color.getRed()/255f, color.getGreen()/255f, color.getBlue()/255f, color.getAlpha()/255f);
 	}
 
 }

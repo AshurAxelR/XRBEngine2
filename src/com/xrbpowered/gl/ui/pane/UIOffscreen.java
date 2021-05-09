@@ -15,7 +15,7 @@ import com.xrbpowered.zoomui.UIContainer;
 public class UIOffscreen extends UINode {
 
 	public final OffscreenPane pane = new OffscreenPane();
-	public Color clearColor = Color.RED;
+	public Color clearColor = new Color(0, true);
 	public final float bufferScale;
 	
 	public UIOffscreen(UIContainer parent, float scale) {
@@ -57,7 +57,7 @@ public class UIOffscreen extends UINode {
 	}
 	
 	protected void renderBuffer(RenderTarget target) {
-		glClearColor(clearColor.getRed()/255f, clearColor.getGreen()/255f, clearColor.getBlue()/255f, 0.0f);
+		RenderTarget.setClearColor(clearColor);
 		glClear(GL_COLOR_BUFFER_BIT | GL_DEPTH_BUFFER_BIT);
 	}
 	

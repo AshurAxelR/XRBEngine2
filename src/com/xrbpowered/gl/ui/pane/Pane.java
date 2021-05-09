@@ -9,8 +9,7 @@ public abstract class Pane {
 	public int width = 0;
 	public int height = 0;
 	public float alpha = 1f;
-	
-	protected boolean ydown = true;
+	public boolean ydown = true;
 	
 	private boolean visible = true;
 	
