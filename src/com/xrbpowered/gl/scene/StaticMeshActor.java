@@ -40,11 +40,12 @@ public class StaticMeshActor extends Actor {
 		shader.unuse();
 	}
 	
-	public static StaticMeshActor make(final StaticMesh mesh, final ActorShader shader, final Texture diffuse) {
+	public static StaticMeshActor make(final StaticMesh mesh, final ActorShader shader, final Texture... textures) {
 		StaticMeshActor actor =  new StaticMeshActor();
 		actor.setMesh(mesh);
 		actor.setShader(shader);
-		actor.setTextures(new Texture[] {diffuse});
+		if(textures!=null)
+			actor.setTextures(textures);
 		return actor;
 	}
 }
