@@ -108,9 +108,6 @@ public class Client {
 		float t0 = (float) glfwGetTime();
 		fpsTime = t0;
 		while(!glfwWindowShouldClose(window)) {
-			input.pollEvents();
-			// TODO process window operations (e.g. switch fullscreen)
-			
 			float t = (float) glfwGetTime();
 			float dt = t-t0;
 			
@@ -121,6 +118,9 @@ public class Client {
 			}
 			frames++;
 			
+			// TODO process window operations (e.g. switch fullscreen)
+			
+			input.pollEvents();
 			render(dt);
 
 			glfwSwapBuffers(window);

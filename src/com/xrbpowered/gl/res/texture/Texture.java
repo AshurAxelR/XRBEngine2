@@ -42,11 +42,15 @@ public class Texture {
 		this.height = h;
 		this.texId = texId;
 	}
-	
+
 	public Texture(String path, boolean wrap, boolean filter) {
+		this(path, wrap, filter, filter);
+	}
+
+	public Texture(String path, boolean wrap, boolean filterMin, boolean filterMag) {
 		try {
 			BufferedImage img = AssetManager.defaultAssets.loadImage(path);
-			create(img, null, wrap, filter);
+			create(img, null, wrap, filterMin, filterMag);
 		} catch (Exception e) {
 			e.printStackTrace();
 			System.exit(-1);
@@ -54,18 +58,26 @@ public class Texture {
 	}
 	
 	public Texture(BufferedImage img, boolean wrap, boolean filter) {
-		create(img, null, wrap, filter);
+		create(img, null, wrap, filter, filter);
 	}
-	
+
+	public Texture(BufferedImage img, boolean wrap, boolean filterMin, boolean filterMag) {
+		create(img, null, wrap, filterMin, filterMag);
+	}
+
 	public Texture(int w, int h, IntBuffer buf, boolean wrap, boolean filter) {
-		create(w, h, buf, wrap, filter);
+		create(w, h, buf, wrap, filter, filter);
+	}
+
+	public Texture(int w, int h, IntBuffer buf, boolean wrap, boolean filterMin, boolean filterMag) {
+		create(w, h, buf, wrap, filterMin, filterMag);
 	}
 
 	public Texture(Color color) {
 		IntBuffer buf = ByteBuffer.allocateDirect(4).order(ByteOrder.nativeOrder()).asIntBuffer();
 		buf.put(color.getRGB());
 		buf.flip();
-		create(1, 1, buf, false, false);
+		create(1, 1, buf, false, false, false);
 	}
 
 	public int getWidth() {
@@ -81,14 +93,22 @@ public class Texture {
 	}
 
 	protected void create(BufferedImage img, IntBuffer buf, boolean wrap, boolean filter) {
-		create(img.getWidth(), img.getHeight(), getPixels(img, buf), wrap, filter);
+		create(img.getWidth(), img.getHeight(), getPixels(img, buf), wrap, filter, filter);
+	}
+
+	protected void create(BufferedImage img, IntBuffer buf, boolean wrap, boolean filterMin, boolean filterMag) {
+		create(img.getWidth(), img.getHeight(), getPixels(img, buf), wrap, filterMin, filterMag);
 	}
 	
 	protected void put(int targetType, int w, int h, IntBuffer buf) {
 		GL11.glTexImage2D(targetType, 0, GL11.GL_RGBA, w, h, 0, GL12.GL_BGRA, GL12.GL_UNSIGNED_INT_8_8_8_8_REV, buf);
 	}
-	
+
 	protected void create(int w, int h, IntBuffer buf, boolean wrap, boolean filter) {
+		create(w, h, buf, wrap, filter, filter);
+	}
+
+	protected void create(int w, int h, IntBuffer buf, boolean wrap, boolean filterMin, boolean filterMag) {
 		width = w;
 		height = h;
 		texId = GL11.glGenTextures();
@@ -96,7 +116,7 @@ public class Texture {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texId);
 
 		put(GL11.GL_TEXTURE_2D, w, h, buf);
-		setProperties(GL11.GL_TEXTURE_2D, wrap, filter, anisotropy);
+		setProperties(GL11.GL_TEXTURE_2D, wrap, filterMin, filterMag, anisotropy);
 	}
 	
 	public Texture(String path) {
@@ -132,13 +152,13 @@ public class Texture {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 	}
 
-	public static void setProperties(int textureType, boolean wrap, boolean filter, int anisotropy) {
+	public static void setProperties(int textureType, boolean wrap, boolean filterMin, boolean filterMag, int anisotropy) {
 		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_WRAP_S, wrap ? GL11.GL_REPEAT : GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_WRAP_T, wrap ? GL11.GL_REPEAT : GL12.GL_CLAMP_TO_EDGE);
-		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_MAG_FILTER, filter ? GL11.GL_LINEAR : GL11.GL_NEAREST);
-		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_MIN_FILTER, filter ? GL11.GL_LINEAR_MIPMAP_LINEAR : GL11.GL_NEAREST);
+		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_MAG_FILTER, filterMag ? GL11.GL_LINEAR : GL11.GL_NEAREST);
+		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_MIN_FILTER, filterMin ? GL11.GL_LINEAR_MIPMAP_LINEAR : GL11.GL_NEAREST);
 		
-		if(filter) {
+		if(filterMin) {
 			GL30.glGenerateMipmap(textureType);
 			if(anisotropy>1) {
 				GL11.glTexParameterf(textureType, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
