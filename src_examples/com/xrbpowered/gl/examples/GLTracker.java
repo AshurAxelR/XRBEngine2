@@ -1,6 +1,8 @@
 package com.xrbpowered.gl.examples;
 
 import java.awt.Color;
+import java.awt.geom.AffineTransform;
+import java.awt.geom.Point2D;
 
 import org.joml.Vector3f;
 import org.joml.Vector4f;
@@ -35,6 +37,7 @@ public class GLTracker extends UIClient {
 	private Controller activeController = null;
 
 	private static final Color transparentColor = new Color(0x00ffffff, true);
+	private static final Color pointerColor = new Color(0x555555);
 	
 	private PointerPane mousePointerPane;
 	private boolean meshActorHover = false;
@@ -50,7 +53,7 @@ public class GLTracker extends UIClient {
 		protected void paintSelf(GraphAssist g) {
 			g.graph.setBackground(transparentColor);
 			g.graph.clearRect(0, 0, (int)getWidth(), (int)getHeight());
-			g.setColor(Color.BLACK);
+			g.setColor(pointerColor);
 			int midy = (int)getHeight()/2;
 			g.line(midy, 0, midy, getHeight());
 			g.line(0, midy, 120, midy);
@@ -71,11 +74,37 @@ public class GLTracker extends UIClient {
 		}
 	}
 	
+	private UINode uiRoot, offsPane;
+	private int quadX = 1;
+	private int quadY = 1;
+	
 	public GLTracker() {
-		super("GLTracker");
+		super("GLTracker", 1.25f);
 		AssetManager.defaultAssets = new FileAssetManager("example_assets", AssetManager.defaultAssets);
+		clearColor = new Color(0xdddddd);
 
-		new UIOffscreen(getContainer()) {
+		UINode uiOffs = new UINode(getContainer()) {
+			@Override
+			public void layout() {
+				offsPane.setSize(getWidth()/2, getHeight()/2);
+				offsPane.setLocation(quadX*getWidth()/2, quadY*getHeight()/2);
+				uiRoot.setSize(offsPane.getWidth(), offsPane.getHeight());
+				uiRoot.setLocation(offsPane.getX(), offsPane.getY());
+				super.layout();
+			}
+			@Override
+			public boolean onMouseDown(float x, float y, Button button, int mods) {
+				if(button==UIElement.Button.right) {
+					quadX = x>getWidth()/2 ? 1 : 0;
+					quadY = y>getHeight()/2 ? 1 : 0;
+					invalidateLayout();
+					repaint();
+				}
+				return true;
+			}
+		};
+		
+		offsPane = new UIOffscreen(uiOffs) {
 			@Override
 			public void setSize(float width, float height) {
 				super.setSize(width, height);
@@ -136,8 +165,11 @@ public class GLTracker extends UIClient {
 			@Override
 			protected void renderBuffer(RenderTarget target) {
 				super.renderBuffer(target);
-				
-				picker.startPicking((int)input.getMouseX(), getFrameHeight()-(int)input.getMouseY(), target);
+
+				float px = getPixelScale();
+				int mx = (int)(baseToLocalX(input.getMouseX())/px);
+				int my = (int)((getHeight()-baseToLocalY(input.getMouseY()))/px);
+				picker.startPicking(mx, my, target);
 				picker.drawActor(meshActor, 1);
 				meshActorHover = picker.finishPicking(target)==1;
 				
@@ -146,7 +178,7 @@ public class GLTracker extends UIClient {
 			}
 		};
 		
-		UINode uiRoot = new UINode(getContainer());
+		uiRoot = new UINode(uiOffs);
 		
 		mousePointerPane = new PointerPane(uiRoot) {
 			@Override
@@ -158,15 +190,27 @@ public class GLTracker extends UIClient {
 		
 		new PointerPane(uiRoot) {
 			private Vector4f vtrackScreen = new Vector4f();
+			private AffineTransform tx = new AffineTransform();
+			private Point2D pt = new Point2D.Float(); 
+			@Override
+			public void paint(GraphAssist g) {
+				tx.setTransform(g.getTransform());
+				super.paint(g);
+			}
 			@Override
 			public void updatePointer() {
 				vtrackScreen.set(meshActor.position.x, meshActor.position.y, meshActor.position.z, 1);
 				camera.getView().transform(vtrackScreen);
 				camera.getProjection().transform(vtrackScreen);
-				float fw = (float)getFrameWidth();
-				float fh = (float)getFrameHeight();
-				pointerX = fw/2f * vtrackScreen.x / vtrackScreen.w + fw/2f;
-				pointerY = fh/2f - fh/2f * vtrackScreen.y / vtrackScreen.w;
+				float fw = getParent().getWidth();// (float)getFrameWidth();
+				float fh = getParent().getHeight();// (float)getFrameHeight();
+				pt.setLocation(
+						fw/2f * vtrackScreen.x / vtrackScreen.w + fw/2f,
+						fh/2f - fh/2f * vtrackScreen.y / vtrackScreen.w
+				);
+				tx.transform(pt, pt);
+				pointerX = (float)pt.getX();
+				pointerY = (float)pt.getY();
 				showPointer = vtrackScreen.z>0;
 			}
 			@Override
