@@ -7,9 +7,13 @@ import static org.lwjgl.system.MemoryStack.*;
 import static org.lwjgl.system.MemoryUtil.*;
 
 import java.awt.event.KeyEvent;
+import java.awt.image.BufferedImage;
+import java.io.IOException;
+import java.nio.ByteBuffer;
 import java.nio.IntBuffer;
 
 import org.lwjgl.glfw.GLFWErrorCallback;
+import org.lwjgl.glfw.GLFWImage;
 import org.lwjgl.glfw.GLFWVidMode;
 import org.lwjgl.glfw.GLFWWindowCloseCallbackI;
 import org.lwjgl.glfw.GLFWWindowSizeCallbackI;
@@ -29,7 +33,7 @@ import com.xrbpowered.gl.res.buffer.RenderTarget;
 public class Client {
 
 	private String title;
-	private long window = NULL;
+	protected long window = NULL;
 	private boolean setup = false;
 	
 	// TODO settings
@@ -141,6 +145,14 @@ public class Client {
 	}
 	
 	/**
+	 * Get window handle required for most GLFW window operations. These operations must usually be done on the main thread. 
+	 * @return GLFW window handle.
+	 */
+	public long getWindowHandle() {
+		return window;
+	}
+	
+	/**
 	 * Check if the window and OpenGL context have been created. Any OpenGL calls are allowed only after this is <code>true</code>. 
 	 * @return <code>true</code> if OpenGL context exists.
 	 */
@@ -226,6 +238,48 @@ public class Client {
 		}
 	}
 	
+	/**
+	 * Change window icon. Must be called from the main thread, preferrably from {@link #createResources()}.
+	 * @param icon {@link BufferedImage} with window icon.
+	 */
+	public void setWindowIcon(BufferedImage icon) {
+		int w = icon.getWidth();
+		int h = icon.getHeight();
+		ByteBuffer buf = ByteBuffer.allocateDirect(4*w*h);
+		for(int y=0; y<h; y++)
+			for(int x=0; x<w; x++) {
+				int rgb = icon.getRGB(x, y);
+				buf.put((byte)((rgb&0x00ff0000)>>16));
+				buf.put((byte)((rgb&0x0000ff00)>>8));
+				buf.put((byte)(rgb&0x000000ff));
+				buf.put((byte)((rgb&0xff000000)>>24));
+			}
+		buf.flip();
+
+		GLFWImage image = GLFWImage.malloc();
+		GLFWImage.Buffer imageBuf = GLFWImage.malloc(1);
+        image.set(w, h, buf);
+        imageBuf.put(0, image);
+        glfwSetWindowIcon(window, imageBuf);
+	}
+
+	/**
+	 * Attempt to load image from {@link AssetManager#defaultAssets} and set it as window icon.
+	 * Must be called from the main thread, preferrably from {@link #createResources()}.
+	 * @param iconPath path to image resource (PNG).
+	 * @return <code>false</code> if resource cannot be loaded.
+	 */
+	public boolean setWindowIcon(String iconPath) {
+		try {
+			setWindowIcon(AssetManager.defaultAssets.loadImage(iconPath));
+			return true;
+		}
+		catch (IOException e) {
+			e.printStackTrace();
+			return false;
+		}
+	}
+
 	/**
 	 * Override this method to initialise OpenGL resources (textures, models, etc.).
 	 * This method may be called multiple times during application life cycle,
