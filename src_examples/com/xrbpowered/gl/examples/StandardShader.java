@@ -1,7 +1,5 @@
 package com.xrbpowered.gl.examples;
 
-import org.joml.Matrix3f;
-import org.joml.Matrix4f;
 import org.joml.Vector3f;
 import org.joml.Vector4f;
 import org.lwjgl.opengl.GL20;
@@ -27,7 +25,6 @@ public class StandardShader extends ActorShader {
 	public float specPower = 20f;
 	public float alpha = 1f;
 	
-	private int normalMatrixLocation;
 	private int lightDirLocation;
 	private int lightColorLocation;
 	private int ambientColorLocation;
@@ -42,11 +39,14 @@ public class StandardShader extends ActorShader {
 	protected StandardShader(String pathVS, String pathFS) {
 		super(standardVertexInfo, pathVS, pathFS);
 	}
-	
+
+	protected StandardShader(VertexInfo info, String pathVS, String pathFS) {
+		super(info, pathVS, pathFS);
+	}
+
 	@Override
 	protected void storeUniformLocations() {
 		super.storeUniformLocations();
-		normalMatrixLocation = GL20.glGetUniformLocation(pId, "normalMatrix");
 		lightDirLocation = GL20.glGetUniformLocation(pId, "lightDirection");
 		lightColorLocation = GL20.glGetUniformLocation(pId, "lightColor");
 		ambientColorLocation = GL20.glGetUniformLocation(pId, "ambientColor");
@@ -76,30 +76,10 @@ public class StandardShader extends ActorShader {
 		GL20.glUseProgram(0);
 	}
 
-	private static Matrix3f norm = new Matrix3f();
-	private static Matrix4f model = new Matrix4f();
-
 	@Override
 	public void updateUniforms() {
 		super.updateUniforms();
 
-		model.set(camera.getView());
-		if(actor!=null)
-			model.mul(actor.getTransform());
-
-		norm._m00(model.m00());
-		norm._m01(model.m01());
-		norm._m02(model.m02());
-		norm._m10(model.m10());
-		norm._m11(model.m11());
-		norm._m12(model.m12());
-		norm._m20(model.m20());
-		norm._m21(model.m21());
-		norm._m22(model.m22());
-		norm.invert();
-		norm.transpose();
-		uniform(normalMatrixLocation, norm);
-		
 		uniform(lightDirLocation, lightDir);
 		uniform(lightColorLocation, lightColor);
 		uniform(ambientColorLocation, ambientColor);

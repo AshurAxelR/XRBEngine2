@@ -52,6 +52,8 @@ public class GLObjViewer extends UIClient {
 	
 	private CameraActor camera = null;
 	private Controller controller;
+	private LightController lightController;
+	private Controller activeController = null;
 	
 	public static class UISwitch extends UIOptionBox<Boolean> {
 		private final String[] labels;
@@ -215,9 +217,6 @@ public class GLObjViewer extends UIClient {
 			setLightDir();
 		}
 	}
-	
-	private LightController lightController;
-	private Controller activeController = null;
 	
 	private void setMesh(StaticMesh m) {
 		if(mesh!=null)
