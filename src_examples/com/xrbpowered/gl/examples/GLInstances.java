@@ -31,8 +31,10 @@ public class GLInstances extends UIClient {
 	
 	public static final VertexInfo standardInstVertexInfo = new VertexInfo(StandardShader.standardVertexInfo)
 			.addAttrib("ins_Position", 3)
-			.addAttrib("ins_RotationY", 1)
-			.addAttrib("ins_Scale", 1); 
+			.addAttrib("ins_Scale", 1)
+			.addAttrib("ins_RotationAxis", 3)
+			.addAttrib("ins_RotationPhase", 1)
+			.addAttrib("ins_RotationSpeed", 1);
 	
 	public class InstanceShader extends StandardShader {
 		public InstanceShader() {
@@ -42,8 +44,10 @@ public class GLInstances extends UIClient {
 	
 	public static class MeshComponentInfo {
 		public Vector3f position = new Vector3f();
-		public float rotationY = 0f;
 		public float scale = 1f;
+		public Vector3f axis = new Vector3f(0, 1, 0);
+		public float phase = 0f;
+		public float speed = 0f;
 	}
 	
 	public static class MeshComponent extends InstancedMeshList<MeshComponentInfo> {
@@ -53,11 +57,19 @@ public class GLInstances extends UIClient {
 		@Override
 		protected void setInstanceData(float[] data, MeshComponentInfo obj, int index) {
 			int offs = getDataOffs(index);
+			if(obj.axis.lengthSquared()<1e-6f)
+				obj.axis.set(0, 1, 0);
+			else
+				obj.axis.normalize();
 			data[offs+0] = obj.position.x;
 			data[offs+1] = obj.position.y;
 			data[offs+2] = obj.position.z;
-			data[offs+3] = obj.rotationY;
-			data[offs+4] = obj.scale;
+			data[offs+3] = obj.scale;
+			data[offs+4] = obj.axis.x;
+			data[offs+5] = obj.axis.y;
+			data[offs+6] = obj.axis.z;
+			data[offs+7] = obj.phase;
+			data[offs+8] = obj.speed;
 		}
 	}
 	
@@ -115,8 +127,14 @@ public class GLInstances extends UIClient {
 					info.position.x = random.nextFloat()*RANGE*2f - RANGE;
 					info.position.y = random.nextFloat()*RANGE*2f - RANGE;
 					info.position.z = random.nextFloat()*RANGE*2f - RANGE;
-					info.rotationY = random.nextFloat()*(float)Math.PI*2f;
 					info.scale = random.nextFloat()*0.5f+0.5f;
+					
+					info.axis.x = random.nextFloat()*2f - 1f;
+					info.axis.y = random.nextFloat()*2f - 1f;
+					info.axis.z = random.nextFloat()*2f - 1f;
+					info.phase = random.nextFloat()*(float)Math.PI*2f;
+					info.speed = random.nextFloat()*(float)Math.PI*0.1f;
+					
 					meshComp.addInstance(info);
 				}
 				meshComp.finishCreateInstances();
@@ -144,6 +162,7 @@ public class GLInstances extends UIClient {
 			
 			@Override
 			public void updateTime(float dt) {
+				shader.time += dt;
 				if(activeController!=null) {
 					if(input.isMouseDown(1) || input.isMouseDown(0))
 						activeController.update(dt);
