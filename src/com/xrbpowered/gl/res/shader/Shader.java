@@ -73,12 +73,8 @@ public abstract class Shader {
 		GL20.glDeleteProgram(pId);
 	}
 	
-	protected int bindAttribLocations() {
-		return bindAttribLocations(this.info, 0);
-	}
-	
-	protected int bindAttribLocations(VertexInfo info, int start) {
-		return (info==null) ? 0 : info.bindAttribLocations(pId, start);
+	protected void bindAttribLocations() {
+		info.bindAttribLocations(pId);
 	}
 	
 	protected void initSamplers(String[] names) {

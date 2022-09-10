@@ -4,8 +4,8 @@ import org.lwjgl.opengl.GL11;
 
 import com.xrbpowered.gl.res.mesh.StaticMesh;
 import com.xrbpowered.gl.res.shader.InstanceBuffer;
+import com.xrbpowered.gl.res.shader.InstanceInfo;
 import com.xrbpowered.gl.res.shader.Shader;
-import com.xrbpowered.gl.res.shader.VertexInfo;
 import com.xrbpowered.gl.res.texture.Texture;
 
 public abstract class InstancedMeshComponent<T> implements RenderComponent<T> {
@@ -59,7 +59,7 @@ public abstract class InstancedMeshComponent<T> implements RenderComponent<T> {
 		mesh.disableDraw();
 	}
 	
-	protected boolean createInstanceBuffer(int count, VertexInfo instInfo) {
+	protected boolean createInstanceBuffer(int count, InstanceInfo instInfo) {
 		if(instBuffer!=null)
 			releaseInstances();
 		if(count>0)
@@ -69,7 +69,7 @@ public abstract class InstancedMeshComponent<T> implements RenderComponent<T> {
 		return instBuffer!=null;
 	}
 	
-	protected float[] createInstanceData(int count, VertexInfo instInfo) {
+	protected float[] createInstanceData(int count, InstanceInfo instInfo) {
 		return instInfo.createData(count);
 	}
 	

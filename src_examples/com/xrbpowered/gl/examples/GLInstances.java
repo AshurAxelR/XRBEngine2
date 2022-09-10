@@ -12,8 +12,8 @@ import com.xrbpowered.gl.res.asset.FileAssetManager;
 import com.xrbpowered.gl.res.buffer.RenderTarget;
 import com.xrbpowered.gl.res.mesh.FastMeshBuilder;
 import com.xrbpowered.gl.res.mesh.StaticMesh;
+import com.xrbpowered.gl.res.shader.InstanceInfo;
 import com.xrbpowered.gl.res.shader.Shader;
-import com.xrbpowered.gl.res.shader.VertexInfo;
 import com.xrbpowered.gl.res.texture.Texture;
 import com.xrbpowered.gl.scene.CameraActor;
 import com.xrbpowered.gl.scene.Controller;
@@ -29,7 +29,7 @@ public class GLInstances extends UIClient {
 	public static final int INST_COUNT = 40000;
 	public static final float RANGE = 40f;
 	
-	public static final VertexInfo standardInstVertexInfo = new VertexInfo(StandardShader.standardVertexInfo)
+	public static final InstanceInfo standardInstInfo = new InstanceInfo(StandardShader.standardVertexInfo)
 			.addAttrib("ins_Position", 3)
 			.addAttrib("ins_Scale", 1)
 			.addAttrib("ins_RotationAxis", 3)
@@ -38,7 +38,7 @@ public class GLInstances extends UIClient {
 	
 	public class InstanceShader extends StandardShader {
 		public InstanceShader() {
-			super("std_inst_v.glsl", "std_f.glsl");
+			super(standardInstInfo, "std_inst_v.glsl", "std_f.glsl");
 		}
 	}
 	
@@ -52,7 +52,7 @@ public class GLInstances extends UIClient {
 	
 	public static class MeshComponent extends InstancedMeshList<MeshComponentInfo> {
 		public MeshComponent() {
-			super(standardInstVertexInfo);
+			super(standardInstInfo);
 		}
 		@Override
 		protected void setInstanceData(float[] data, MeshComponentInfo obj, int index) {

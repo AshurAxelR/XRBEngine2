@@ -2,16 +2,16 @@ package com.xrbpowered.gl.scene.comp;
 
 import java.util.ArrayList;
 
-import com.xrbpowered.gl.res.shader.VertexInfo;
+import com.xrbpowered.gl.res.shader.InstanceInfo;
 
 public abstract class InstancedMeshList<T> extends InstancedMeshComponent<T> {
 
-	public final VertexInfo instInfo;
+	public final InstanceInfo instInfo;
 	
 	private ArrayList<T> instances = null;
 	private int instCount = 0;
 	
-	public InstancedMeshList(VertexInfo instInfo) {
+	public InstancedMeshList(InstanceInfo instInfo) {
 		this.instInfo = instInfo;
 	}
 	

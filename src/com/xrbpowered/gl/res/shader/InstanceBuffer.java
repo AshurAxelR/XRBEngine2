@@ -10,12 +10,10 @@ public class InstanceBuffer {
 
 	private FloatBuffer instanceBuffer = null;
 	
-	public final int startAttrib;
-	public final VertexInfo instInfo;
+	public final InstanceInfo instInfo;
 	private int iboId;
 	
-	public InstanceBuffer(int maxCount, int startAttrib, VertexInfo instInfo) {
-		this.startAttrib = startAttrib;
+	public InstanceBuffer(int maxCount, InstanceInfo instInfo) {
 		this.instInfo = instInfo;
 		int size = maxCount * instInfo.getStride();
 		instanceBuffer = BufferUtils.createByteBuffer(size).asFloatBuffer();
@@ -24,10 +22,6 @@ public class InstanceBuffer {
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, iboId);
 		GL15.glBufferData(GL15.GL_ARRAY_BUFFER, size, GL15.GL_STATIC_DRAW);
 		GL15.glBindBuffer(GL15.GL_ARRAY_BUFFER, 0);
-	}
-
-	public InstanceBuffer(int maxCount, VertexInfo instInfo) {
-		this(maxCount, instInfo.start, instInfo);
 	}
 
 	public static int bindAttribLocations(Shader shader, int startIndex, String[] names) {

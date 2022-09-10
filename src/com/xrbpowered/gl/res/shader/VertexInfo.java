@@ -19,24 +19,10 @@ public class VertexInfo {
 			this.offset = offset;
 		}
 	}
-	
-	public final int start;
-	
+
 	private int skip = 0;
 	private List<Attribute> attribs = new ArrayList<>();
 	
-	public VertexInfo(int start) {
-		this.start = start;
-	}
-	
-	public VertexInfo() {
-		this(0);
-	}
-
-	public VertexInfo(VertexInfo start) {
-		this.start = start.getAttributeCount();
-	}
-
 	public VertexInfo addAttrib(String name, int elemCount) {
 		this.attribs.add(new Attribute(name, elemCount, skip));
 		skip += elemCount;
@@ -82,7 +68,12 @@ public class VertexInfo {
 			return get(index);
 	}
 	
+	public int getStartAttributeIndex() {
+		return 0;
+	}
+	
 	public void initAttribPointers() {
+		int start = getStartAttributeIndex();
 		for(int i=0; i<getAttributeCount(); i++) {
 			Attribute a = attribs.get(i);
 			GL20.glVertexAttribPointer(i+start, a.elemCount, GL11.GL_FLOAT, false, getStride(), a.offset * 4);
@@ -91,34 +82,34 @@ public class VertexInfo {
 
 	public void initAttribPointers(int instDivisor) {
 		initAttribPointers();
+		int start = getStartAttributeIndex();
 		for(int i=0; i<getAttributeCount(); i++) {
 			GL33.glVertexAttribDivisor(i+start, 1);
 		}
 	}
 
 	public void enableAttribs() {
+		int start = getStartAttributeIndex();
 		for(int i=0; i<getAttributeCount(); i++) {
 			GL20.glEnableVertexAttribArray(i+start);
 		}
 	}
 
 	public void disableAttribs() {
+		int start = getStartAttributeIndex();
 		for(int i=0; i<getAttributeCount(); i++) {
 			GL20.glDisableVertexAttribArray(i+start);
 		}
 	}
 
-	public int bindAttribLocations(int programId) {
-		return bindAttribLocations(programId, this.start);
-	}
-
-	public int bindAttribLocations(int programId, int start) {
+	public void bindAttribLocations(int programId) {
+		int start = getStartAttributeIndex();
 		for(int i=0; i<getAttributeCount(); i++) {
 			Attribute a = attribs.get(i);
 			if(a.name!=null)
 				GL20.glBindAttribLocation(programId, i+start, a.name);
 		}
-		return getAttributeCount();
 	}
+
 	
 }
