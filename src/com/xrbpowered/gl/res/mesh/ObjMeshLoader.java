@@ -16,7 +16,7 @@ public class ObjMeshLoader {
 	protected static final float NORM_EPSILON = 0.01f;
 
 	protected int maxVertexArgs = 4;
-	protected int maxLineArgs = 4;
+	protected int maxLineArgs = 5;
 	
 	protected ArrayList<Vector3f> v = new ArrayList<>();
 	protected ArrayList<Vector2f> vt = new ArrayList<>();
@@ -140,30 +140,18 @@ public class ObjMeshLoader {
 	}
 	
 	public StaticMesh loadObj(Scanner in, String objName, VertexInfo info, MeshBuilder.Options options) {
-		try {
-			String name = skip(in);
-			while(name!=null && !objName.equals(name))
-				name = skip(in);
-			StaticMesh m = load(in, new AdvancedMeshBuilder(info, options)).create();
-			return m;
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		String name = skip(in);
+		while(name!=null && !objName.equals(name))
+			name = skip(in);
+		StaticMesh m = load(in, new AdvancedMeshBuilder(info, options)).create();
+		return m;
 	}
 	
 	public StaticMesh loadObj(Scanner in, int objIndex, VertexInfo info, MeshBuilder.Options options) {
-		try {
-			for(int i=0; i<objIndex+1; i++)
-				skip(in);
-			StaticMesh m = load(in, new AdvancedMeshBuilder(info, options)).create();
-			return m;
-		}
-		catch(Exception e) {
-			e.printStackTrace();
-			return null;
-		}
+		for(int i=0; i<objIndex+1; i++)
+			skip(in);
+		StaticMesh m = load(in, new AdvancedMeshBuilder(info, options)).create();
+		return m;
 	}
 	
 	public LinkedHashMap<String, AdvancedMeshBuilder> loadBuilders(String path, VertexInfo info, MeshBuilder.Options options) {
@@ -187,6 +175,7 @@ public class ObjMeshLoader {
 			return m;
 		}
 		catch(Exception e) {
+			System.err.printf("Error loading OBJ from %s\n", path);
 			e.printStackTrace();
 			return null;
 		}
@@ -200,6 +189,7 @@ public class ObjMeshLoader {
 			return m;
 		}
 		catch(Exception e) {
+			System.err.printf("Error loading OBJ from %s\n", path);
 			e.printStackTrace();
 			return null;
 		}
