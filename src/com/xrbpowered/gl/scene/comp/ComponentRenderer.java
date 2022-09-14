@@ -19,6 +19,16 @@ public abstract class ComponentRenderer<C extends RenderComponent<?>> {
 		components = null;
 	}
 	
+	public void startCreateInstances() {
+		for(C comp : components)
+			comp.startCreateInstances();
+	}
+
+	public void finishCreateInstances() {
+		for(C comp : components)
+			comp.finishCreateInstances();
+	}
+
 	protected abstract Shader getShader();
 
 	protected void startDrawInstances(Shader shader) {

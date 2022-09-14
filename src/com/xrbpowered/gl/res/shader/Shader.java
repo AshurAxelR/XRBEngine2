@@ -110,35 +110,35 @@ public abstract class Shader {
 	}
 	
 	private static final FloatBuffer matrix4Buffer = BufferUtils.createFloatBuffer(16);
-	protected static void uniform(int location, Matrix4f matrix) {
+	public static void uniform(int location, Matrix4f matrix) {
 		matrix.get(matrix4Buffer);
 		GL20.glUniformMatrix4fv(location, false, matrix4Buffer);
 	}
 
 	private static final FloatBuffer matrix3Buffer = BufferUtils.createFloatBuffer(9);
-	protected static void uniform(int location, Matrix3f matrix) {
+	public static void uniform(int location, Matrix3f matrix) {
 		matrix.get(matrix3Buffer);
 		GL20.glUniformMatrix3fv(location, false, matrix3Buffer);
 	}
 
 	private static final FloatBuffer vec4Buffer = BufferUtils.createFloatBuffer(4);
-	protected static void uniform(int location, Vector4f v) {
+	public static void uniform(int location, Vector4f v) {
 		v.get(vec4Buffer);
 		GL20.glUniform4fv(location, vec4Buffer);
 	}
 
-	protected static void uniform(int location, Color c) {
+	public static void uniform(int location, Color c) {
 		GL20.glUniform4f(location, c.getRed()/255f, c.getGreen()/255f, c.getBlue()/255f, c.getAlpha()/255f);
 	}
 
 	private static final FloatBuffer vec3Buffer = BufferUtils.createFloatBuffer(3);
-	protected static void uniform(int location, Vector3f v) {
+	public static void uniform(int location, Vector3f v) {
 		v.get(vec3Buffer);
 		GL20.glUniform3fv(location, vec3Buffer);
 	}
 
 	private static final FloatBuffer vec2Buffer = BufferUtils.createFloatBuffer(2);
-	protected static void uniform(int location, Vector2f v) {
+	public static void uniform(int location, Vector2f v) {
 		v.get(vec2Buffer);
 		GL20.glUniform2fv(location, vec2Buffer);
 	}
