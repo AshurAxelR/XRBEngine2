@@ -29,7 +29,7 @@ public class UIOffscreen extends UINode {
 
 	@Override
 	public void setSize(float width, float height) {
-		if(width==getWidth() && height==getHeight())
+		if(width==getWidth() && height==getHeight() || width==0 || height==0)
 			return;
 		float pix = getPixelScale() * bufferScale;
 		OffscreenBuffer buffer = createOffscreenBuffer((int)(width/pix), (int)(height/pix));

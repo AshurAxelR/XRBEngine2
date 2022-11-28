@@ -30,12 +30,16 @@ public class StaticMeshActor extends Actor {
 		this.textures[index] = texture;
 	}
 	
+	protected void bindTextures() {
+		Texture.bindAll(textures);
+	}
+	
 	public void draw() {
 		if(shader==null || mesh==null)
 			return;
 		shader.setActor(this);
 		shader.use();
-		Texture.bindAll(textures);
+		bindTextures();
 		mesh.draw();
 		shader.unuse();
 	}

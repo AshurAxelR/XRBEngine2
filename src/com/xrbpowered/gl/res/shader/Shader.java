@@ -25,7 +25,6 @@ public abstract class Shader {
 	}
 	
 	public Shader(VertexInfo info, String pathVS, String pathFS) {
-//		System.out.println("Compile: "+pathVS+", "+pathFS);
 		this.info = info;
 		int vsId = loadShader(pathVS, GL20.GL_VERTEX_SHADER);
 		int fsId = loadShader(pathFS, GL20.GL_FRAGMENT_SHADER);
@@ -38,7 +37,6 @@ public abstract class Shader {
 		
 		bindAttribLocations();
 		
-//		System.out.println("Link: "+pathVS+", "+pathFS);
 		GL20.glLinkProgram(pId);
 		if (GL20.glGetProgrami(pId, GL20.GL_LINK_STATUS) == GL11.GL_FALSE) {
 			System.err.println("Could not link program "+pathVS+", "+pathFS);
@@ -48,8 +46,6 @@ public abstract class Shader {
 		GL20.glValidateProgram(pId);
 		
 		storeUniformLocations();
-//		Client.checkError();
-//		System.out.println("Done: "+pathVS+", "+pathFS+"\n");
 	}
 	
 	protected abstract void storeUniformLocations();

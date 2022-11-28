@@ -36,6 +36,10 @@ public abstract class InstancedMeshComponent<T> implements RenderComponent<T> {
 		this.culling = culling;
 	}
 	
+	protected void bindTextures() {
+		Texture.bindAll(textures);
+	}
+	
 	@Override
 	public void drawInstances(Shader shader) {
 		if(getInstCount()==0)
@@ -44,7 +48,7 @@ public abstract class InstancedMeshComponent<T> implements RenderComponent<T> {
 			GL11.glEnable(GL11.GL_CULL_FACE);
 		else
 			GL11.glDisable(GL11.GL_CULL_FACE);
-		Texture.bindAll(textures);
+		bindTextures();
 		meshDrawCallInstanced();
 	}
 
