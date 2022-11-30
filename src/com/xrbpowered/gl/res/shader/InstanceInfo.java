@@ -18,5 +18,11 @@ public class InstanceInfo extends VertexInfo {
 	public int getStartAttributeIndex() {
 		return vertexInfo.getAttributeCount();
 	}
+	
+	@Override
+	public void bindAttribLocations(int programId) {
+		vertexInfo.bindAttribLocations(programId);
+		super.bindAttribLocations(programId);
+	}
 
 }

@@ -26,8 +26,8 @@ import com.xrbpowered.zoomui.UIElement;
 
 public class GLInstances extends UIClient {
 
-	public static final int INST_COUNT = 40000;
-	public static final float RANGE = 40f;
+	public static final int INST_COUNT = 1000000;
+	public static final float RANGE = 100f;
 	
 	public static final InstanceInfo standardInstInfo = new InstanceInfo(StandardShader.standardVertexInfo)
 			.addAttrib("ins_Position", 3)
