@@ -83,7 +83,8 @@ public class Controller {
 	protected void lookAlign(Vector3f move, Vector3f rotation) {
 		move.negate();
 		m.identity();
-		Actor.rotateYawPitchRoll(rotation, m);
+		// Actor.rotateYawPitchRoll(rotation, m);
+		m.rotateZYX(rotation);
 		v4.set(move, 0);
 		m.transform(v4);
 		move.set(v4.x, v4.y, v4.z);

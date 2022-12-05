@@ -7,6 +7,7 @@ public class CameraActor extends Actor {
 
 	protected Matrix4f projection = null;
 	protected final Matrix4f view = new Matrix4f();
+	protected final Matrix4f viewFollow = new Matrix4f();
 	private float aspectRatio = 1f;
 	
 	public CameraActor setProjection(Matrix4f projection) {
@@ -35,13 +36,22 @@ public class CameraActor extends Actor {
 		return view;
 	}
 	
+	public Matrix4f getViewFollow() {
+		return viewFollow;
+	}
+	
 	@Override
 	public void updateTransform() {
 		super.updateTransform();
+		
 		view.identity();
 		view.translate(position);
-		rotateYawPitchRoll(rotation, view);
+		view.rotateZYX(rotation);
 		view.invert();
+		
+		viewFollow.identity();
+		viewFollow.rotateZYX(rotation);
+		viewFollow.invert();
 	}
 	
 	public void getDir(Vector3f out) {

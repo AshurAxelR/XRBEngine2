@@ -11,6 +11,7 @@ public class CameraShader extends Shader {
 	protected int cameraPositionLocation;
 
 	protected CameraActor camera = null;
+	public boolean followCamera = false;
 	
 	public CameraShader(VertexInfo info, String pathVS, String pathFS) {
 		super(info, pathVS, pathFS);
@@ -20,7 +21,13 @@ public class CameraShader extends Shader {
 		this.camera = camera;
 		return this;
 	}
-	
+
+	public CameraShader setCamera(CameraActor camera, boolean follow) {
+		this.camera = camera;
+		this.followCamera = follow;
+		return this;
+	}
+
 	public CameraActor getCamera() {
 		return camera;
 	}
@@ -35,7 +42,7 @@ public class CameraShader extends Shader {
 	@Override
 	public void updateUniforms() {
 		uniform(projectionMatrixLocation, camera.getProjection());
-		uniform(viewMatrixLocation, camera.getView());
+		uniform(viewMatrixLocation, followCamera ? camera.getViewFollow() : camera.getView());
 		if(cameraPositionLocation>=0)
 			uniform(cameraPositionLocation, camera.position);
 	}

@@ -48,24 +48,21 @@ public class Actor {
 		return position.distance(actor.position);
 	}
 	
-	protected static final Vector3f X_AXIS = new Vector3f(1, 0, 0);
-	protected static final Vector3f Y_AXIS = new Vector3f(0, 1, 0);
-	protected static final Vector3f Z_AXIS = new Vector3f(0, 0, 1);
-	
 	public static Matrix4f setTransform(Vector3f position, Vector3f scale, Vector3f rotation, Matrix4f m) {
 		m.identity();
 		m.translate(position);
-		rotateYawPitchRoll(rotation, m);
+		//rotateYawPitchRoll(rotation, m);
+		m.rotateZYX(rotation);
 		m.scale(scale);
 		return m;
 	}
 	
-	public static Matrix4f rotateYawPitchRoll(Vector3f rotation, Matrix4f m) {
-		m.rotate(rotation.z, Z_AXIS);
-		m.rotate(rotation.y, Y_AXIS);
-		m.rotate(rotation.x, X_AXIS);
+	/*public static Matrix4f rotateYawPitchRoll(Vector3f rotation, Matrix4f m) {
+		m.rotate(rotation.z, Axis.Z);
+		m.rotate(rotation.y, Axis.Y);
+		m.rotate(rotation.x, Axis.X);
 		return m;
-	}
+	}*/
 	
 	public Comparator<Actor> sortBackToFront = new Comparator<Actor>() {
 		@Override
