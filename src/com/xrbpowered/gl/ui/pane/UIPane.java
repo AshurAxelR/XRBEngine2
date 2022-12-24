@@ -1,5 +1,6 @@
 package com.xrbpowered.gl.ui.pane;
 
+import java.awt.Color;
 import java.awt.Rectangle;
 import java.awt.RenderingHints;
 
@@ -12,6 +13,8 @@ import com.xrbpowered.zoomui.UIElement;
 
 public class UIPane extends UITexture {
 
+	public static final Color transparent = new Color(0, true);
+	
 	protected boolean opaque;
 	protected boolean requestRepaint = true;
 	
@@ -71,6 +74,11 @@ public class UIPane extends UITexture {
 	public void paint(GraphAssist g) {
 		updatePaneBounds(g);
 		updateBuffer();
+	}
+	
+	public void clear(GraphAssist g) {
+		g.graph.setBackground(transparent);
+		g.graph.clearRect(0, 0, (int)getWidth(), (int)getHeight());
 	}
 	
 	protected void fitChildren() {

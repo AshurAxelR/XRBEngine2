@@ -74,6 +74,9 @@ public abstract class Shader {
 	}
 	
 	protected void initSamplers(String[] names) {
+		if(names==null)
+			return;
+		
 		GL20.glUseProgram(pId);
 		for(int i=0; i<names.length; i++) {
 			GL20.glUniform1i(GL20.glGetUniformLocation(pId, names[i]), i);
