@@ -76,11 +76,15 @@ public class UIPane extends UITexture {
 		updateBuffer();
 	}
 	
-	public void clear(GraphAssist g) {
-		g.graph.setBackground(transparent);
+	public void clear(GraphAssist g, Color bg) {
+		g.graph.setBackground(bg);
 		g.graph.clearRect(0, 0, (int)getWidth(), (int)getHeight());
 	}
-	
+
+	public void clear(GraphAssist g) {
+		clear(g, transparent);
+	}
+
 	protected void fitChildren() {
 		for(UIElement c : children) {
 			c.setLocation(0, 0);
