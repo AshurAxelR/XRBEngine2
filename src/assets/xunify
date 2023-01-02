@@ -1,0 +1,12 @@
+
+#ifdef VERTEX_SHADER
+#define vs_in in
+#define vs_out out
+#define fs_out // 
+#endif
+
+#ifdef FRAGMENT_SHADER
+#define vs_in // 
+#define vs_out in
+#define fs_out out
+#endif

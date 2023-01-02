@@ -13,8 +13,20 @@ public class CameraShader extends Shader {
 	protected CameraActor camera = null;
 	public boolean followCamera = false;
 	
+	public CameraShader(VertexInfo info, String pathXS) {
+		super(info, pathXS);
+	}
+
+	public CameraShader(VertexInfo info, String pathXS, String[] defs) {
+		super(info, pathXS, defs);
+	}
+
 	public CameraShader(VertexInfo info, String pathVS, String pathFS) {
 		super(info, pathVS, pathFS);
+	}
+
+	public CameraShader(VertexInfo info, String pathVS, String pathFS, String[] defs) {
+		super(info, pathVS, pathFS, defs);
 	}
 	
 	public CameraShader setCamera(CameraActor camera) {

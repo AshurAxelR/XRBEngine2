@@ -2,8 +2,10 @@ package com.xrbpowered.gl.res.asset;
 
 import java.awt.Font;
 import java.awt.image.BufferedImage;
+import java.io.File;
 import java.io.IOException;
 import java.io.InputStream;
+import java.nio.file.Path;
 
 public abstract class AssetManager {
 
@@ -41,6 +43,12 @@ public abstract class AssetManager {
 	
 	public Font loadFont(String path) throws IOException {
 		return IOUtils.loadFont(openStream(path));
+	}
+	
+	public static String relativeTo(String src, String path) {
+		Path base = new File(src).getParentFile().toPath();
+		Path dst = base.resolve(path);
+		return dst.toString().replace(File.separatorChar, '/');
 	}
 	
 	public static AssetManager defaultAssets = new FileAssetManager(null, null);
