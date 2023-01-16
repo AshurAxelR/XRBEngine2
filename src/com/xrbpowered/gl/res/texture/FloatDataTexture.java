@@ -14,16 +14,20 @@ public class FloatDataTexture extends Texture {
 
 	public FloatBuffer buffer;
 	
-	public FloatDataTexture(int w, int h, boolean wrap) {
+	public FloatDataTexture(int w, int h, boolean wrap, boolean filterMin, boolean filterMag) {
 		width = w;
 		height = h;
 		texId = GL11.glGenTextures();
 		GL13.glActiveTexture(GL13.GL_TEXTURE0);
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texId);
-		setProperties(GL11.GL_TEXTURE_2D, wrap, false, false, anisotropy);
+		setProperties(GL11.GL_TEXTURE_2D, wrap, filterMin, filterMag, 1, false);
 		buffer = ByteBuffer.allocateDirect(16 * w * h).order(ByteOrder.nativeOrder()).asFloatBuffer();
 	}
-	
+
+	public FloatDataTexture(int w, int h, boolean wrap) {
+		this(w, h, wrap, false, false);
+	}
+
 	public FloatDataTexture setData(float[] data) {
 		buffer.put(data);
 		buffer.flip();

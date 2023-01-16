@@ -116,7 +116,7 @@ public class Texture {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, texId);
 
 		put(GL11.GL_TEXTURE_2D, w, h, buf);
-		setProperties(GL11.GL_TEXTURE_2D, wrap, filterMin, filterMag, anisotropy);
+		setProperties(GL11.GL_TEXTURE_2D, wrap, filterMin, filterMag, anisotropy, filterMin);
 	}
 	
 	public Texture(String path) {
@@ -158,17 +158,17 @@ public class Texture {
 		GL11.glBindTexture(GL11.GL_TEXTURE_2D, 0);
 	}
 
-	public static void setProperties(int textureType, boolean wrap, boolean filterMin, boolean filterMag, int anisotropy) {
+	public static void setProperties(int textureType, boolean wrap, boolean filterMin, boolean filterMag, int anisotropy, boolean mipmap) {
 		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_WRAP_S, wrap ? GL11.GL_REPEAT : GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_WRAP_T, wrap ? GL11.GL_REPEAT : GL12.GL_CLAMP_TO_EDGE);
 		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_MAG_FILTER, filterMag ? GL11.GL_LINEAR : GL11.GL_NEAREST);
-		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_MIN_FILTER, filterMin ? GL11.GL_LINEAR_MIPMAP_LINEAR : GL11.GL_NEAREST);
+		GL11.glTexParameteri(textureType, GL11.GL_TEXTURE_MIN_FILTER, filterMin ? (mipmap ? GL11.GL_LINEAR_MIPMAP_LINEAR : GL11.GL_LINEAR) : GL11.GL_NEAREST);
 		
-		if(filterMin) {
+		if(filterMin && mipmap) {
 			GL30.glGenerateMipmap(textureType);
-			if(anisotropy>1) {
-				GL11.glTexParameterf(textureType, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
-			}
+		}
+		if(filterMin && anisotropy>1) {
+			GL11.glTexParameterf(textureType, EXTTextureFilterAnisotropic.GL_TEXTURE_MAX_ANISOTROPY_EXT, anisotropy);
 		}
 	}
 	
