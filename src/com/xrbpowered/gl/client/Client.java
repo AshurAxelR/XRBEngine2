@@ -185,13 +185,19 @@ public class Client {
 		glfwWindowHint(GLFW_SAMPLES, multisample);
 		
 		if(fullscreen) {
+			// Issue with the driver or GLFW: horrible screen tearing if
+			// vsync is ON (!) and the undecorated window size exactly matches
+			// the screen size. Adding +1 as a workaround
 			GLFWVidMode mode = glfwGetVideoMode(glfwGetPrimaryMonitor());
 			frameWidth = mode.width();
-			frameHeight = mode.height();
+			frameHeight = mode.height()+1;
 			window = glfwCreateWindow(frameWidth, frameHeight, title, NULL, NULL);
 		}
-		else
+		else {
+			frameWidth = windowedWidth;
+			frameHeight = windowedHeight;
 			window = glfwCreateWindow(windowedWidth, windowedHeight, title, NULL, NULL);
+		}
 		
 		if(window == NULL)
 			throw new RuntimeException("Failed to create the GLFW window");
