@@ -214,7 +214,13 @@ public class Client {
 		centerWindow();
 		glfwShowWindow(window);
 		
-		createResources();
+		try {
+			createResources();
+		}
+		catch (Exception e) {
+			e.printStackTrace();
+			System.exit(1);
+		}
 		setup = true;
 	}
 	
