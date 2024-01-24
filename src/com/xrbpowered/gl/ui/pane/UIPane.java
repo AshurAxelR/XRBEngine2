@@ -24,7 +24,7 @@ public class UIPane extends UITexture {
 	}
 	
 	private BufferTexture checkCreateBuffer() {
-		if(!((ClientWindow) getBase().getWindow()).client.hasContext())
+		if(!((ClientWindow) getRoot().getWindow()).client.hasContext())
 			return null;
 		
 		BufferTexture old = (BufferTexture) pane.getTexture();
@@ -54,8 +54,9 @@ public class UIPane extends UITexture {
 		gBuff.setClip(new Rectangle(0, 0, texture.getWidth(), texture.getHeight()));
 		gBuff.scale(1f/getPixelScale());
 		
-		paintSelf(gBuff);
+		paintBackground(gBuff);
 		paintChildren(gBuff);
+		paintForeground(gBuff);
 		
 		texture.finishUpdate();
 		requestRepaint = false;
@@ -67,7 +68,11 @@ public class UIPane extends UITexture {
 	}
 	
 	@Override
-	protected void paintSelf(GraphAssist g) {
+	protected void paintBackground(GraphAssist g) {
+	}
+
+	@Override
+	protected void paintForeground(GraphAssist g) {
 	}
 	
 	@Override
@@ -87,7 +92,7 @@ public class UIPane extends UITexture {
 
 	protected void fitChildren() {
 		for(UIElement c : children) {
-			c.setLocation(0, 0);
+			c.setPosition(0, 0);
 			c.setSize(getWidth(), getHeight());
 		}
 	}

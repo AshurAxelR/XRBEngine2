@@ -30,7 +30,7 @@ public class UIFpsOverlay extends UINode {
 		
 		pane = new UIPane(this, false) {
 			@Override
-			protected void paintSelf(GraphAssist g) {
+			protected void paintBackground(GraphAssist g) {
 				g.graph.setBackground(bgColor);
 				g.graph.clearRect(0, 0, (int)getWidth(), (int)getHeight());
 				g.setColor(fgColor);
@@ -59,7 +59,7 @@ public class UIFpsOverlay extends UINode {
 	}
 
 	private void updateLocation() {
-		pane.setLocation(
+		pane.setPosition(
 				GraphAssist.align(getWidth()-pane.getWidth()-margin*2f, halign)+margin,
 				GraphAssist.align(getHeight()-pane.getHeight()-margin*2f, valign)+margin
 			);

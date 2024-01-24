@@ -84,7 +84,7 @@ public class GLObjViewer extends UIClient {
 				}
 			};
 			btnCube.setSize((192-20)/2, btnCube.getHeight());
-			btnCube.setLocation(8, 24);
+			btnCube.setPosition(8, 24);
 			btnSphere = new UIButton(this, "Sphere") {
 				@Override
 				public void onAction() {
@@ -92,11 +92,11 @@ public class GLObjViewer extends UIClient {
 				}
 			};
 			btnSphere.setSize(btnCube.getWidth(), btnSphere.getHeight());
-			btnSphere.setLocation(8+btnCube.getWidth()+4, 24);
+			btnSphere.setPosition(8+btnCube.getWidth()+4, 24);
 			txtObjName = new UITextBox(this);
 			txtObjName.editor.setText(objName);
 			txtObjName.setSize(192-40, txtObjName.getHeight());
-			txtObjName.setLocation(8, 48);
+			txtObjName.setPosition(8, 48);
 			btnReloadObj = new UIToolButton(this, UIToolButton.iconPath+"refresh.svg", 16, 2) {
 				public void onAction() {
 					if(!loadObject(txtObjName.editor.getText()))
@@ -106,21 +106,21 @@ public class GLObjViewer extends UIClient {
 					repaint();
 				}
 			};
-			btnReloadObj.setLocation(txtObjName.getX()+txtObjName.getWidth()+4, txtObjName.getY());
+			btnReloadObj.setPosition(txtObjName.getX()+txtObjName.getWidth()+4, txtObjName.getY());
 			optSelTexture = new UIOptionBox<String>(this, new String[] {"Diffuse", "Specular", "Normal"}) {
 				@Override
 				protected void onOptionSelected(String value) {
 					selectedTexture = getSelectedIndex();
-					getBase().resetFocus();
+					getRoot().resetFocus();
 					txtTextureName.editor.setText(textureNames[selectedTexture]);
 				}
 			};
 			optSelTexture.setSize(192-16, optSelTexture.getHeight());
-			optSelTexture.setLocation(8, 96);
+			optSelTexture.setPosition(8, 96);
 			txtTextureName = new UITextBox(this);
 			txtTextureName.editor.setText(defaultTextureNames[selectedTexture]);
 			txtTextureName.setSize(txtObjName.getWidth(), txtObjName.getHeight());
-			txtTextureName.setLocation(8, 120);
+			txtTextureName.setPosition(8, 120);
 			btnReloadTexture = new UIToolButton(this, UIToolButton.iconPath+"refresh.svg", 16, 2) {
 				public void onAction() {
 					String s = txtTextureName.editor.getText();
@@ -135,7 +135,7 @@ public class GLObjViewer extends UIClient {
 					repaint();
 				}
 			};
-			btnReloadTexture.setLocation(txtTextureName.getX()+txtTextureName.getWidth()+4, txtTextureName.getY());
+			btnReloadTexture.setPosition(txtTextureName.getX()+txtTextureName.getWidth()+4, txtTextureName.getY());
 			optWrap = new UISwitch(this, new String[] {"No wrap", "Wrap"}) {
 				@Override
 				protected void onOptionSelected(Boolean value) {
@@ -144,7 +144,7 @@ public class GLObjViewer extends UIClient {
 			};
 			optWrap.selectOption(wrapTexture);
 			optWrap.setSize(txtTextureName.getWidth(), optWrap.getHeight());
-			optWrap.setLocation(8, 144);
+			optWrap.setPosition(8, 144);
 			optFilter = new UISwitch(this, new String[] {"Pixelate", "Filter"}) {
 				@Override
 				protected void onOptionSelected(Boolean value) {
@@ -153,7 +153,7 @@ public class GLObjViewer extends UIClient {
 			};
 			optFilter.selectOption(filterTexture);
 			optFilter.setSize(optWrap.getWidth(), optWrap.getHeight());
-			optFilter.setLocation(8, 168);
+			optFilter.setPosition(8, 168);
 			optCullMode = new UIOptionBox<String>(this, new String[] {"No culling", "Cull back", "Cull front"}) {
 				@Override
 				protected void onOptionSelected(String value) {
@@ -161,7 +161,7 @@ public class GLObjViewer extends UIClient {
 				}
 			};
 			optCullMode.setSize(192-16, optCullMode.getHeight());
-			optCullMode.setLocation(8, 216);
+			optCullMode.setPosition(8, 216);
 			optWireframe = new UISwitch(this, new String[] {"Solid", "Wireframe"}) {
 				@Override
 				protected void onOptionSelected(Boolean value) {
@@ -170,16 +170,16 @@ public class GLObjViewer extends UIClient {
 			};
 			optWireframe.selectOption(wireframe);
 			optWireframe.setSize(192-16, optWireframe.getHeight());
-			optWireframe.setLocation(8, 240);
+			optWireframe.setPosition(8, 240);
 		}
 		@Override
 		public void layout() {
-			setLocation(16, 16);
+			setPosition(16, 16);
 			setSize(192, 280);
 			super.layout();
 		}
 		@Override
-		protected void paintSelf(GraphAssist g) {
+		protected void paintBackground(GraphAssist g) {
 			g.pixelBorder(this, 1, new Color(0xeeeeee), UIButton.colorBorder);
 			g.setFont(UIButton.font);
 			g.setColor(UIButton.colorText);
@@ -189,7 +189,7 @@ public class GLObjViewer extends UIClient {
 		}
 		@Override
 		public boolean onMouseDown(float x, float y, Button button, int mods) {
-			getBase().resetFocus();
+			getRoot().resetFocus();
 			return true;
 		}
 	}
@@ -328,12 +328,12 @@ public class GLObjViewer extends UIClient {
 			public boolean onMouseDown(float x, float y, Button button, int mods) {
 				if(button==UIElement.Button.right) {
 					activeController = lightController;
-					getBase().resetFocus();
+					getRoot().resetFocus();
 					activeController.setMouseLook(true);
 				}
 				else if(button==UIElement.Button.left) {
 					activeController = controller;
-					getBase().resetFocus();
+					getRoot().resetFocus();
 					activeController.setMouseLook(true);
 				}
 				return true;

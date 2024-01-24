@@ -154,7 +154,7 @@ public class GLInstances extends UIClient {
 			public boolean onMouseDown(float x, float y, Button button, int mods) {
 				if(button==UIElement.Button.left) {
 					activeController = cameraController;
-					getBase().resetFocus();
+					getRoot().resetFocus();
 					activeController.setMouseLook(true);
 				}
 				return true;

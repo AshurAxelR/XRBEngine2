@@ -6,7 +6,7 @@ import java.awt.FontMetrics;
 
 import com.xrbpowered.gl.client.UIClient;
 import com.xrbpowered.gl.res.texture.ImageBuffer;
-import com.xrbpowered.zoomui.BaseContainer;
+import com.xrbpowered.zoomui.RootContainer;
 import com.xrbpowered.zoomui.UIModalWindow;
 import com.xrbpowered.zoomui.UIPopupWindow;
 import com.xrbpowered.zoomui.UIModalWindow.ResultHandler;
@@ -42,8 +42,8 @@ public class ClientWindow extends UIWindow {
 	}
 	
 	@Override
-	protected BaseContainer createContainer() {
-		return new ClientBaseContainer(this);
+	protected RootContainer createContainer() {
+		return new ClientRootContainer(this);
 	}
 
 	@Override
@@ -90,7 +90,7 @@ public class ClientWindow extends UIWindow {
 
 	@Override
 	public void repaint() {
-		((ClientBaseContainer) container).repaint();
+		((ClientRootContainer) container).repaint();
 	}
 
 	@Override

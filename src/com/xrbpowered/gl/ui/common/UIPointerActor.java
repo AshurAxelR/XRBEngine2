@@ -50,7 +50,7 @@ public class UIPointerActor extends Actor {
 		boolean visible = this.visible && (p.x>=-1f && p.x<=1f) && (p.y>=-1f && p.y<=1f) && (p.z>0 && (maxDist<0f || dist<=maxDist));
 		ui.setVisible(visible);
 		if(visible) {
-			ui.setLocation(x, y);
+			ui.setPosition(x, y);
 			ui.getParent().repaint();
 		}
 	}

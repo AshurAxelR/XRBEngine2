@@ -52,7 +52,7 @@ public class UIOffscreen extends UINode {
 	}
 	
 	@Override
-	protected void paintSelf(GraphAssist g) {
+	protected void paintBackground(GraphAssist g) {
 		updatePaneBounds(g);
 	}
 	

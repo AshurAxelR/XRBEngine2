@@ -76,7 +76,7 @@ public class GLXUnify extends UIClient {
 			@Override
 			public boolean onMouseDown(float x, float y, Button button, int mods) {
 				if(button==UIElement.Button.left) {
-					getBase().resetFocus();
+					getRoot().resetFocus();
 					controller.setMouseLook(true);
 				}
 				return true;

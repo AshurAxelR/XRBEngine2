@@ -5,7 +5,7 @@ import static org.lwjgl.opengl.GL11.*;
 import java.awt.Color;
 
 import com.xrbpowered.gl.res.buffer.RenderTarget;
-import com.xrbpowered.gl.ui.ClientBaseContainer;
+import com.xrbpowered.gl.ui.ClientRootContainer;
 import com.xrbpowered.gl.ui.ClientWindow;
 import com.xrbpowered.gl.ui.pane.PaneShader;
 import com.xrbpowered.zoomui.UIElement;
@@ -33,8 +33,8 @@ public class UIClient extends Client {
 		return uiWindow;
 	}
 	
-	public ClientBaseContainer getContainer() {
-		return (ClientBaseContainer) uiWindow.getContainer();
+	public ClientRootContainer getContainer() {
+		return (ClientRootContainer) uiWindow.getContainer();
 	}
 	
 	public void createResources() {

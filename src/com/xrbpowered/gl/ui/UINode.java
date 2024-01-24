@@ -13,7 +13,7 @@ public class UINode extends UIContainer implements Renderer {
 	}
 	
 	public UIClient getClient() {
-		return ((ClientWindow) getBase().getWindow()).client;
+		return ((ClientWindow) getRoot().getWindow()).client;
 	}
 
 	@Override

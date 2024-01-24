@@ -2,15 +2,15 @@ package com.xrbpowered.gl.ui;
 
 import com.xrbpowered.gl.client.Renderer;
 import com.xrbpowered.gl.res.buffer.RenderTarget;
-import com.xrbpowered.zoomui.BaseContainer;
 import com.xrbpowered.zoomui.GraphAssist;
+import com.xrbpowered.zoomui.RootContainer;
 import com.xrbpowered.zoomui.UIElement;
 
-public class ClientBaseContainer extends BaseContainer implements Renderer {
+public class ClientRootContainer extends RootContainer implements Renderer {
 
 	protected boolean updateRequired = true;
 	
-	public ClientBaseContainer(ClientWindow window) {
+	public ClientRootContainer(ClientWindow window) {
 		super(window, 1f);
 	}
 

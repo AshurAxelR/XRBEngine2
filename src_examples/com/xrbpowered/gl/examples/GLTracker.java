@@ -50,7 +50,7 @@ public class GLTracker extends UIClient {
 			setSize(100, 40);
 		}
 		@Override
-		protected void paintSelf(GraphAssist g) {
+		protected void paintBackground(GraphAssist g) {
 			g.graph.setBackground(transparentColor);
 			g.graph.clearRect(0, 0, (int)getWidth(), (int)getHeight());
 			g.setColor(pointerColor);
@@ -87,9 +87,9 @@ public class GLTracker extends UIClient {
 			@Override
 			public void layout() {
 				offsPane.setSize(getWidth()/2, getHeight()/2);
-				offsPane.setLocation(quadX*getWidth()/2, quadY*getHeight()/2);
+				offsPane.setPosition(quadX*getWidth()/2, quadY*getHeight()/2);
 				uiRoot.setSize(offsPane.getWidth(), offsPane.getHeight());
-				uiRoot.setLocation(offsPane.getX(), offsPane.getY());
+				uiRoot.setPosition(offsPane.getX(), offsPane.getY());
 				super.layout();
 			}
 			@Override
@@ -138,7 +138,7 @@ public class GLTracker extends UIClient {
 			public boolean onMouseDown(float x, float y, Button button, int mods) {
 				if(button==UIElement.Button.left) {
 					activeController = controller;
-					getBase().resetFocus();
+					getRoot().resetFocus();
 					activeController.setMouseLook(true);
 					mousePointerPane.showPointer = false;
 				}
@@ -167,8 +167,8 @@ public class GLTracker extends UIClient {
 				super.renderBuffer(target);
 
 				float px = getPixelScale();
-				int mx = (int)(baseToLocalX(input.getMouseX())/px);
-				int my = (int)((getHeight()-baseToLocalY(input.getMouseY()))/px);
+				int mx = (int)(rootToLocalX(input.getMouseX())/px);
+				int my = (int)((getHeight()-rootToLocalY(input.getMouseY()))/px);
 				picker.startPicking(mx, my, target);
 				picker.drawActor(meshActor, 1);
 				meshActorHover = picker.finishPicking(target)==1;
@@ -214,8 +214,8 @@ public class GLTracker extends UIClient {
 				showPointer = vtrackScreen.z>0;
 			}
 			@Override
-			protected void paintSelf(GraphAssist g) {
-				super.paintSelf(g);
+			protected void paintBackground(GraphAssist g) {
+				super.paintBackground(g);
 				if(meshActorHover && mousePointerPane.showPointer) {
 					int midy = (int)getHeight()/2;
 					g.setStroke(3f);

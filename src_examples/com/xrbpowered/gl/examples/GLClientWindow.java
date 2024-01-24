@@ -39,13 +39,13 @@ public class GLClientWindow extends UIClient {
 		root = new UINode(getContainer()) {
 			@Override
 			public void layout() {
-				files.setLocation(0, 0);
+				files.setPosition(0, 0);
 				files.setSize(getWidth()/2, getHeight());
-				render.setLocation(getWidth()/2, 0);
+				render.setPosition(getWidth()/2, 0);
 				render.setSize(getWidth()/2, getHeight());
 				// render.setLocation(0, 0);
 				// render.setSize(getWidth(), getHeight());
-				checker.setLocation(getWidth()-checker.getWidth()-10f, 10f);
+				checker.setPosition(getWidth()-checker.getWidth()-10f, 10f);
 				super.layout();
 			}
 		};
@@ -106,7 +106,7 @@ public class GLClientWindow extends UIClient {
 			@Override
 			public boolean onMouseDown(float x, float y, Button button, int mods) {
 				if(button==UIElement.Button.left) {
-					getBase().resetFocus();
+					getRoot().resetFocus();
 					controller.setMouseLook(true);
 				}
 				return true;

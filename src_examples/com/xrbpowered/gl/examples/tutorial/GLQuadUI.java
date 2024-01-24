@@ -23,7 +23,7 @@ public class GLQuadUI extends UIClient {
 				super.setupResources();
 			}
 		};
-		pane.setLocation(10, 10);
+		pane.setPosition(10, 10);
 		pane.setSize(512, 512);
 	}
 	
