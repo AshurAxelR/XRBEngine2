@@ -31,7 +31,7 @@ public class UIOffscreen extends UINode {
 	public void setSize(float width, float height) {
 		if(width==getWidth() && height==getHeight() || width==0 || height==0)
 			return;
-		float pix = getPixelScale() * bufferScale;
+		float pix = getPixelSize() * bufferScale;
 		OffscreenBuffer buffer = createOffscreenBuffer((int)(width/pix), (int)(height/pix));
 		pane.setBuffer(buffer);
 		super.setSize(width, height);

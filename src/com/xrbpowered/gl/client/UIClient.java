@@ -8,7 +8,6 @@ import com.xrbpowered.gl.res.buffer.RenderTarget;
 import com.xrbpowered.gl.ui.ClientRootContainer;
 import com.xrbpowered.gl.ui.ClientWindow;
 import com.xrbpowered.gl.ui.pane.PaneShader;
-import com.xrbpowered.zoomui.UIElement;
 import com.xrbpowered.zoomui.UIWindowFactory;
 	
 public class UIClient extends Client {
@@ -63,37 +62,31 @@ public class UIClient extends Client {
 	
 	@Override
 	public void keyPressed(char c, int code) {
-		getContainer().onKeyPressed(c, code, input.getKeyMods());
+		getContainer().onKeyPressed(c, code, input.getInputInfo());
 	}
 	
 	@Override
 	public void mouseMoved(float x, float y) {
 		if(input.isMouseDown())
-			getContainer().onMouseDragged(x, y);
+			getContainer().onMouseDragged(x, y, input.getMouseInfo());
 		else
-			getContainer().onMouseMoved(x, y, input.getKeyMods());
+			getContainer().onMouseMoved(x, y, input.getMouseInfo());
 	}
 	
 	@Override
 	public void mouseDown(float x, float y, int button) {
-		getContainer().notifyMouseDown(x, y, getMouseButton(button), input.getKeyMods());
+		getContainer().notifyMouseDown(x, y, input.getMouseInfo(button));
 	}
 	
 	@Override
 	public void mouseUp(float x, float y, int button) {
-		getContainer().notifyMouseUp(x, y, getMouseButton(button), input.getKeyMods(), null);
+		getContainer().notifyMouseUp(x, y, input.getMouseInfo(button), null);
 	}
 	
 	@Override
 	public void mouseScroll(float x, float y, float delta) {
-		getContainer().notifyMouseScroll(x, y, delta, input.getKeyMods());
+		getContainer().notifyMouseScroll(x, y, delta, input.getMouseInfo());
 	}
 
-	public static UIElement.Button getMouseButton(int button) {
-		if(button>=0 && button<3)
-			return UIElement.Button.values()[button];
-		else
-			return UIElement.Button.unknown;
-	}
 
 }

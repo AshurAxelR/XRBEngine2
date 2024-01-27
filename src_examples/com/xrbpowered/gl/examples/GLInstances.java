@@ -1,5 +1,7 @@
 package com.xrbpowered.gl.examples;
 
+import static com.xrbpowered.zoomui.MouseInfo.LEFT;
+
 import java.awt.Color;
 import java.util.Random;
 
@@ -22,7 +24,7 @@ import com.xrbpowered.gl.scene.comp.InstancedMeshList;
 import com.xrbpowered.gl.ui.common.UIFpsOverlay;
 import com.xrbpowered.gl.ui.pane.UIOffscreen;
 import com.xrbpowered.zoomui.GraphAssist;
-import com.xrbpowered.zoomui.UIElement;
+import com.xrbpowered.zoomui.MouseInfo;
 
 public class GLInstances extends UIClient {
 
@@ -151,8 +153,8 @@ public class GLInstances extends UIClient {
 			}
 			
 			@Override
-			public boolean onMouseDown(float x, float y, Button button, int mods) {
-				if(button==UIElement.Button.left) {
+			public boolean onMouseDown(float x, float y, MouseInfo mouse) {
+				if(mouse.eventButton==LEFT) {
 					activeController = cameraController;
 					getRoot().resetFocus();
 					activeController.setMouseLook(true);

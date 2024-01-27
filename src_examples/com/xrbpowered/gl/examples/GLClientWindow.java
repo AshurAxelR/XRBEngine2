@@ -1,5 +1,7 @@
 package com.xrbpowered.gl.examples;
 
+import static com.xrbpowered.zoomui.MouseInfo.LEFT;
+
 import java.awt.Color;
 
 import org.joml.Vector3f;
@@ -21,7 +23,7 @@ import com.xrbpowered.gl.ui.pane.UIOffscreen;
 import com.xrbpowered.gl.ui.pane.UIPane;
 import com.xrbpowered.gl.ui.pane.UITexture;
 import com.xrbpowered.zoomui.GraphAssist;
-import com.xrbpowered.zoomui.UIElement;
+import com.xrbpowered.zoomui.MouseInfo;
 import com.xrbpowered.zoomui.std.file.UIFileBrowser;
 
 public class GLClientWindow extends UIClient {
@@ -104,8 +106,8 @@ public class GLClientWindow extends UIClient {
 			}
 			
 			@Override
-			public boolean onMouseDown(float x, float y, Button button, int mods) {
-				if(button==UIElement.Button.left) {
+			public boolean onMouseDown(float x, float y, MouseInfo mouse) {
+				if(mouse.eventButton==LEFT) {
 					getRoot().resetFocus();
 					controller.setMouseLook(true);
 				}

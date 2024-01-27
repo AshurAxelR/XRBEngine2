@@ -13,7 +13,8 @@ import org.lwjgl.glfw.GLFWKeyCallback;
 import org.lwjgl.glfw.GLFWMouseButtonCallbackI;
 import org.lwjgl.glfw.GLFWScrollCallbackI;
 
-import com.xrbpowered.zoomui.UIElement;
+import com.xrbpowered.zoomui.InputInfo;
+import com.xrbpowered.zoomui.MouseInfo;
 
 public class ClientInput {
 
@@ -22,6 +23,7 @@ public class ClientInput {
 	
 	private float mouseX, mouseY;
 	private HashSet<Integer> pressedMouseButtons = new HashSet<>();
+	private int mouseButtons = MouseInfo.NONE;
 	private boolean deltaInput = false;
 	private boolean cursorReset = false;
 
@@ -44,6 +46,7 @@ public class ClientInput {
 		public void invoke(long window, int button, int action, int mods) {
 			if(action==GLFW_PRESS) {
 				pressedMouseButtons.add(button);
+				mouseButtons |= getMouseButton(button);
 				if(deltaInput)
 					client.mouseDown(-1, -1, button);
 				else
@@ -51,6 +54,7 @@ public class ClientInput {
 			}
 			else {
 				pressedMouseButtons.remove(button);
+				mouseButtons &= ~getMouseButton(button);
 				if(deltaInput)
 					client.mouseUp(-1, -1, button);
 				else
@@ -74,11 +78,11 @@ public class ClientInput {
 		public void invoke(long window, int key, int scancode, int action, int mods) {
 			keyMods = 0;
 			if((mods&GLFW.GLFW_MOD_SHIFT)!=0)
-				keyMods |= UIElement.modShiftMask;
+				keyMods |= InputInfo.SHIFT;
 			if((mods&GLFW.GLFW_MOD_CONTROL)!=0)
-				keyMods |= UIElement.modCtrlMask;
+				keyMods |= InputInfo.CTRL;
 			if((mods&GLFW.GLFW_MOD_ALT)!=0)
-				keyMods |= UIElement.modAltMask;
+				keyMods |= InputInfo.ALT;
 
 			int code = scanToCode(scancode);
 			if(code!=0) {
@@ -195,6 +199,27 @@ public class ClientInput {
 
 	public boolean isAnyKeyDown() {
 		return !pressedKeys.isEmpty();
+	}
+	
+	public InputInfo getInputInfo() {
+		return new InputInfo(keyMods);
+	}
+	
+	public static int getMouseButton(int button) {
+		if(button>4)
+			return MouseInfo.UNKNOWN;
+		else if(button>=0)
+			return 1 << button;
+		else
+			return MouseInfo.NONE;
+	}
+	
+	public MouseInfo getMouseInfo(int button) {
+		return new MouseInfo(getMouseButton(button), mouseButtons, keyMods);
+	}
+
+	public MouseInfo getMouseInfo() {
+		return new MouseInfo(-1, mouseButtons, keyMods);
 	}
 
 	public static final int[] keyMap = {

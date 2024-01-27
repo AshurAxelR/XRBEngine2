@@ -28,7 +28,7 @@ public class UIPane extends UITexture {
 			return null;
 		
 		BufferTexture old = (BufferTexture) pane.getTexture();
-		float pix = getPixelScale();
+		float pix = getPixelSize();
 		int w = (int)(getWidth()/pix);
 		int h = (int)(getHeight()/pix);
 		if(old!=null && old.getWidth()==w && old.getHeight()==h)
@@ -52,7 +52,7 @@ public class UIPane extends UITexture {
 		gBuff.graph.setRenderingHint(RenderingHints.KEY_ANTIALIASING, RenderingHints.VALUE_ANTIALIAS_ON);
 		gBuff.graph.setRenderingHint(RenderingHints.KEY_STROKE_CONTROL, RenderingHints.VALUE_STROKE_NORMALIZE);
 		gBuff.setClip(new Rectangle(0, 0, texture.getWidth(), texture.getHeight()));
-		gBuff.scale(1f/getPixelScale());
+		gBuff.scale(1f/getPixelSize());
 		
 		paintBackground(gBuff);
 		paintChildren(gBuff);

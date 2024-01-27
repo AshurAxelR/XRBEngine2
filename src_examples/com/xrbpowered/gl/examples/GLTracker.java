@@ -1,5 +1,8 @@
 package com.xrbpowered.gl.examples;
 
+import static com.xrbpowered.zoomui.MouseInfo.LEFT;
+import static com.xrbpowered.zoomui.MouseInfo.RIGHT;
+
 import java.awt.Color;
 import java.awt.geom.AffineTransform;
 import java.awt.geom.Point2D;
@@ -22,8 +25,8 @@ import com.xrbpowered.gl.ui.UINode;
 import com.xrbpowered.gl.ui.pane.UIOffscreen;
 import com.xrbpowered.gl.ui.pane.UIPane;
 import com.xrbpowered.zoomui.GraphAssist;
+import com.xrbpowered.zoomui.MouseInfo;
 import com.xrbpowered.zoomui.UIContainer;
-import com.xrbpowered.zoomui.UIElement;
 
 public class GLTracker extends UIClient {
 
@@ -66,7 +69,7 @@ public class GLTracker extends UIClient {
 		public void render(RenderTarget target) {
 			updatePointer();
 			if(isVisible() && showPointer) {
-				int d = (int)(getHeight()/getPixelScale())/2;
+				int d = (int)(getHeight()/getPixelSize())/2;
 				pane.setAnchor((int)pointerX-d, (int)pointerY-d);
 				requestRepaint = true;
 				super.render(target);
@@ -93,8 +96,8 @@ public class GLTracker extends UIClient {
 				super.layout();
 			}
 			@Override
-			public boolean onMouseDown(float x, float y, Button button, int mods) {
-				if(button==UIElement.Button.right) {
+			public boolean onMouseDown(float x, float y, MouseInfo mouse) {
+				if(mouse.eventButton==RIGHT) {
 					quadX = x>getWidth()/2 ? 1 : 0;
 					quadY = y>getHeight()/2 ? 1 : 0;
 					invalidateLayout();
@@ -135,8 +138,8 @@ public class GLTracker extends UIClient {
 			}
 			
 			@Override
-			public boolean onMouseDown(float x, float y, Button button, int mods) {
-				if(button==UIElement.Button.left) {
+			public boolean onMouseDown(float x, float y, MouseInfo mouse) {
+				if(mouse.eventButton==LEFT) {
 					activeController = controller;
 					getRoot().resetFocus();
 					activeController.setMouseLook(true);
@@ -166,7 +169,7 @@ public class GLTracker extends UIClient {
 			protected void renderBuffer(RenderTarget target) {
 				super.renderBuffer(target);
 
-				float px = getPixelScale();
+				float px = getPixelSize();
 				int mx = (int)(rootToLocalX(input.getMouseX())/px);
 				int my = (int)((getHeight()-rootToLocalY(input.getMouseY()))/px);
 				picker.startPicking(mx, my, target);

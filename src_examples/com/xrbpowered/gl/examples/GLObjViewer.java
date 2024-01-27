@@ -1,5 +1,8 @@
 package com.xrbpowered.gl.examples;
 
+import static com.xrbpowered.zoomui.MouseInfo.LEFT;
+import static com.xrbpowered.zoomui.MouseInfo.RIGHT;
+
 import java.awt.Color;
 import java.awt.image.BufferedImage;
 
@@ -24,8 +27,8 @@ import com.xrbpowered.gl.ui.UINode;
 import com.xrbpowered.gl.ui.pane.UIOffscreen;
 import com.xrbpowered.gl.ui.pane.UIPane;
 import com.xrbpowered.zoomui.GraphAssist;
+import com.xrbpowered.zoomui.MouseInfo;
 import com.xrbpowered.zoomui.UIContainer;
-import com.xrbpowered.zoomui.UIElement;
 import com.xrbpowered.zoomui.base.UIButtonBase;
 import com.xrbpowered.zoomui.std.UIButton;
 import com.xrbpowered.zoomui.std.UIListBox;
@@ -188,7 +191,7 @@ public class GLObjViewer extends UIClient {
 			g.drawString("Render:", 8, 212);
 		}
 		@Override
-		public boolean onMouseDown(float x, float y, Button button, int mods) {
+		public boolean onMouseDown(float x, float y, MouseInfo mouse) {
 			getRoot().resetFocus();
 			return true;
 		}
@@ -325,13 +328,13 @@ public class GLObjViewer extends UIClient {
 			}
 			
 			@Override
-			public boolean onMouseDown(float x, float y, Button button, int mods) {
-				if(button==UIElement.Button.right) {
+			public boolean onMouseDown(float x, float y, MouseInfo mouse) {
+				if(mouse.eventButton==RIGHT) {
 					activeController = lightController;
 					getRoot().resetFocus();
 					activeController.setMouseLook(true);
 				}
-				else if(button==UIElement.Button.left) {
+				else if(mouse.eventButton==LEFT) {
 					activeController = controller;
 					getRoot().resetFocus();
 					activeController.setMouseLook(true);

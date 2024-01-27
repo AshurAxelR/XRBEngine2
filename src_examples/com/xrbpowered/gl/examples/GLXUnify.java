@@ -1,5 +1,7 @@
 package com.xrbpowered.gl.examples;
 
+import static com.xrbpowered.zoomui.MouseInfo.LEFT;
+
 import java.awt.Color;
 
 import org.joml.Vector3f;
@@ -18,7 +20,7 @@ import com.xrbpowered.gl.scene.CameraActor;
 import com.xrbpowered.gl.scene.Controller;
 import com.xrbpowered.gl.scene.StaticMeshActor;
 import com.xrbpowered.gl.ui.pane.UIOffscreen;
-import com.xrbpowered.zoomui.UIElement;
+import com.xrbpowered.zoomui.MouseInfo;
 
 public class GLXUnify extends UIClient {
 
@@ -74,8 +76,8 @@ public class GLXUnify extends UIClient {
 			}
 			
 			@Override
-			public boolean onMouseDown(float x, float y, Button button, int mods) {
-				if(button==UIElement.Button.left) {
+			public boolean onMouseDown(float x, float y, MouseInfo mouse) {
+				if(mouse.eventButton==LEFT) {
 					getRoot().resetFocus();
 					controller.setMouseLook(true);
 				}
