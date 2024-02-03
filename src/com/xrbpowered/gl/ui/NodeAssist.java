@@ -34,8 +34,8 @@ public class NodeAssist extends GraphAssist {
 		transform.setToIdentity();
 	}
 	
-	public void translate(double tx, double ty) {
-		transform.translate(tx, ty);
+	public void translate(double dx, double dy) {
+		transform.translate(dx, dy);
 	}
 	
 	public void scale(double scale) {
