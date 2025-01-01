@@ -8,31 +8,19 @@ import com.xrbpowered.gl.res.shader.VertexInfo;
 
 public abstract class MeshBuilder {
 
-	public static class Options {
-		public final String positionName;
-		public final String normalName;
-		public final String tangentName;
-		public final String texCoordName;
-		public final String colorName;
+	public enum BuilderAttribute {
+		position("in_Position"),
+		normal("in_Normal"),
+		tangent("in_Tangent"),
+		texCoord("in_TexCoord"),
+		color("in_Color");
 		
-		public Options(String position, String normal, String tangent, String texCoord, String color) {
-			this.positionName = position;
-			this.normalName = normal;
-			this.tangentName = tangent;
-			this.texCoordName = texCoord;
-			this.colorName = color;
-		}
+		public final String defaultName;
 		
-		private Options() {
-			this.positionName = "in_Position";
-			this.normalName = "in_Normal";
-			this.tangentName = "in_Tangent";
-			this.texCoordName = "in_TexCoord";
-			this.colorName = "in_Color";
+		private BuilderAttribute(String defaultName) {
+			this.defaultName = defaultName;
 		}
 	}
-	
-	private static final Options defaultOptions = new Options(); 
 	
 	public abstract class Vertex {
 		public abstract Vertex set(VertexInfo.Attribute attrib, int offs, float x);
@@ -112,14 +100,13 @@ public abstract class MeshBuilder {
 	protected VertexInfo.Attribute texCoordAttrib;
 	protected VertexInfo.Attribute colorAttrib;
 	
-	public MeshBuilder(VertexInfo info, Options options) {
+	public MeshBuilder(VertexInfo info) {
 		this.info = info;
-		options = options==null ? defaultOptions : options;
-		positionAttrib = info.get(options.positionName);
-		normalAttrib = info.get(options.normalName);
-		tangentAttrib = info.get(options.tangentName);
-		texCoordAttrib = info.get(options.texCoordName);
-		colorAttrib = info.get(options.colorName);
+		positionAttrib = info.get(BuilderAttribute.position);
+		normalAttrib = info.get(BuilderAttribute.normal);
+		tangentAttrib = info.get(BuilderAttribute.tangent);
+		texCoordAttrib = info.get(BuilderAttribute.texCoord);
+		colorAttrib = info.get(BuilderAttribute.color);
 	}
 
 	public abstract StaticMesh create();

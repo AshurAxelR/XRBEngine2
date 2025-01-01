@@ -178,8 +178,8 @@ public class AdvancedMeshBuilder extends MeshBuilder {
 	public List<Vertex> vertices = new ArrayList<>();
 	public List<Face> faces = new ArrayList<>();
 	
-	public AdvancedMeshBuilder(VertexInfo info, Options options) {
-		super(info, options);
+	public AdvancedMeshBuilder(VertexInfo info) {
+		super(info);
 	}
 
 	public Vertex addVertex() {

@@ -229,7 +229,7 @@ public class GLObjViewer extends UIClient {
 	}
 	
 	private boolean loadObject(String name) {
-		StaticMesh m = ObjMeshLoader.loadObj(name, 0, 1f, StandardShader.standardVertexInfo, null);
+		StaticMesh m = ObjMeshLoader.loadObj(name, 0, 1f, StandardShader.standardVertexInfo);
 		if(m!=null) {
 			setMesh(m);
 			objName = name;
@@ -240,11 +240,11 @@ public class GLObjViewer extends UIClient {
 	}
 	
 	private void setCubeMesh() {
-		setMesh(FastMeshBuilder.cube(1f, StandardShader.standardVertexInfo, null));
+		setMesh(FastMeshBuilder.cube(1f, StandardShader.standardVertexInfo));
 	}
 
 	private void setSphereMesh() {
-		setMesh(FastMeshBuilder.sphere(1f, 32, StandardShader.standardVertexInfo, null));
+		setMesh(FastMeshBuilder.sphere(1f, 32, StandardShader.standardVertexInfo));
 	}
 
 	private void setTexture(Texture t) {

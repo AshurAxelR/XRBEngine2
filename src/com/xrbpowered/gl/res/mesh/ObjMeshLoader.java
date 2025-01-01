@@ -122,12 +122,12 @@ public class ObjMeshLoader {
 		return objectName;
 	}
 	
-	public LinkedHashMap<String, AdvancedMeshBuilder> loadBuilders(Scanner in, VertexInfo info, MeshBuilder.Options options) {
+	public LinkedHashMap<String, AdvancedMeshBuilder> loadBuilders(Scanner in, VertexInfo info) {
 		try {
 			LinkedHashMap<String, AdvancedMeshBuilder> builders = new LinkedHashMap<>();
 			String name = skip(in);
 			while(name!=null) {
-				AdvancedMeshBuilder b = load(in, new AdvancedMeshBuilder(info, options));
+				AdvancedMeshBuilder b = load(in, new AdvancedMeshBuilder(info));
 				builders.put(name, b);
 				name = objectName;
 			}
@@ -139,25 +139,25 @@ public class ObjMeshLoader {
 		}
 	}
 	
-	public StaticMesh loadObj(Scanner in, String objName, VertexInfo info, MeshBuilder.Options options) {
+	public StaticMesh loadObj(Scanner in, String objName, VertexInfo info) {
 		String name = skip(in);
 		while(name!=null && !objName.equals(name))
 			name = skip(in);
-		StaticMesh m = load(in, new AdvancedMeshBuilder(info, options)).create();
+		StaticMesh m = load(in, new AdvancedMeshBuilder(info)).create();
 		return m;
 	}
 	
-	public StaticMesh loadObj(Scanner in, int objIndex, VertexInfo info, MeshBuilder.Options options) {
+	public StaticMesh loadObj(Scanner in, int objIndex, VertexInfo info) {
 		for(int i=0; i<objIndex+1; i++)
 			skip(in);
-		StaticMesh m = load(in, new AdvancedMeshBuilder(info, options)).create();
+		StaticMesh m = load(in, new AdvancedMeshBuilder(info)).create();
 		return m;
 	}
 	
-	public LinkedHashMap<String, AdvancedMeshBuilder> loadBuilders(String path, VertexInfo info, MeshBuilder.Options options) {
+	public LinkedHashMap<String, AdvancedMeshBuilder> loadBuilders(String path, VertexInfo info) {
 		try {
 			Scanner in = new Scanner(AssetManager.defaultAssets.openStream(path));
-			LinkedHashMap<String, AdvancedMeshBuilder> builders = loadBuilders(in, info, options);
+			LinkedHashMap<String, AdvancedMeshBuilder> builders = loadBuilders(in, info);
 			in.close();
 			return builders;
 		}
@@ -167,10 +167,10 @@ public class ObjMeshLoader {
 		}
 	}
 	
-	public StaticMesh loadObj(String path, String objName, VertexInfo info, MeshBuilder.Options options) {
+	public StaticMesh loadObj(String path, String objName, VertexInfo info) {
 		try {
 			Scanner in = new Scanner(AssetManager.defaultAssets.openStream(path));
-			StaticMesh m = loadObj(in, objName, info, options);
+			StaticMesh m = loadObj(in, objName, info);
 			in.close();
 			return m;
 		}
@@ -181,10 +181,10 @@ public class ObjMeshLoader {
 		}
 	}
 	
-	public StaticMesh loadObj(String path, int objIndex, VertexInfo info, MeshBuilder.Options options) {
+	public StaticMesh loadObj(String path, int objIndex, VertexInfo info) {
 		try {
 			Scanner in = new Scanner(AssetManager.defaultAssets.openStream(path));
-			StaticMesh m = loadObj(in, objIndex, info, options);
+			StaticMesh m = loadObj(in, objIndex, info);
 			in.close();
 			return m;
 		}
@@ -195,11 +195,11 @@ public class ObjMeshLoader {
 		}
 	}
 	
-	public static StaticMesh loadObj(String path, String objName, float scale, VertexInfo info, MeshBuilder.Options options) {
-		return new ObjMeshLoader(scale).loadObj(path, objName, info, options);
+	public static StaticMesh loadObj(String path, String objName, float scale, VertexInfo info) {
+		return new ObjMeshLoader(scale).loadObj(path, objName, info);
 	}
 	
-	public static StaticMesh loadObj(String path, int objIndex, float scale, VertexInfo info, MeshBuilder.Options options) {
-		return new ObjMeshLoader(scale).loadObj(path, objIndex, info, options);
+	public static StaticMesh loadObj(String path, int objIndex, float scale, VertexInfo info) {
+		return new ObjMeshLoader(scale).loadObj(path, objIndex, info);
 	}
 }

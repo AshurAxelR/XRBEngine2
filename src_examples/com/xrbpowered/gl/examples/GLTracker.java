@@ -129,7 +129,7 @@ public class GLTracker extends UIClient {
 				shader.lightColor.set(0.5f, 0.5f, 0.5f, 1f);
 				shader.lightDir.set(-0.5f, -0.5f, -1f).normalize();
 
-				mesh = FastMeshBuilder.sphere(1, 16, StandardShader.standardVertexInfo, null);
+				mesh = FastMeshBuilder.sphere(1, 16, StandardShader.standardVertexInfo);
 				meshActor = StaticMeshActor.make(mesh, shader, new Texture(new Color(0xffcc99)), new Texture(new Color(0x999999)), new Texture(new Color(0x8080ff)));
 				
 				picker = new ActorPicker(camera);

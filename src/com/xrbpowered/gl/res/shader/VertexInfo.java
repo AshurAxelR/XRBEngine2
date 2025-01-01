@@ -7,6 +7,8 @@ import org.lwjgl.opengl.GL11;
 import org.lwjgl.opengl.GL20;
 import org.lwjgl.opengl.GL33;
 
+import com.xrbpowered.gl.res.mesh.MeshBuilder.BuilderAttribute;
+
 public class VertexInfo {
 
 	public static class Attribute {
@@ -66,6 +68,10 @@ public class VertexInfo {
 			return null;
 		else
 			return get(index);
+	}
+	
+	public Attribute get(BuilderAttribute attr) {
+		return get(attr.defaultName);
 	}
 	
 	public int getStartAttributeIndex() {

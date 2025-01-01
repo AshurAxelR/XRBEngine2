@@ -95,7 +95,7 @@ public class GLClientWindow extends UIClient {
 				//texture = new Texture(new Color(0xffddbb));
 
 				//mesh = FastMeshBuilder.cube(1f, StandardShader.standardVertexInfo, null);
-				mesh = ObjMeshLoader.loadObj("test.obj", 0, 1f, StandardShader.standardVertexInfo, null);
+				mesh = ObjMeshLoader.loadObj("test.obj", 0, 1f, StandardShader.standardVertexInfo);
 				if(mesh==null)
 					throw new RuntimeException("Cannot load mesh");
 				meshActor = StaticMeshActor.make(mesh, shader, texture);

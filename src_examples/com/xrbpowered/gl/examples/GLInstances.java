@@ -116,7 +116,7 @@ public class GLInstances extends UIClient {
 				
 				diffuse = new Texture("floor_tiles.jpg");
 				normal = new Texture("floor_tiles_n.jpg"); // new Texture(new Color(0x8080ff));
-				mesh = FastMeshBuilder.cube(1f, StandardShader.standardVertexInfo, null);
+				mesh = FastMeshBuilder.cube(1f, StandardShader.standardVertexInfo);
 				
 				meshComp = new MeshComponent();
 				meshComp.setTextures(new Texture[] {diffuse, new Texture(new Color(0xffffff)), normal});

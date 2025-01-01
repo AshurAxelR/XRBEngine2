@@ -65,7 +65,7 @@ public class GLXUnify extends UIClient {
 				
 				texture = new Texture("checker.png", true, true);
 
-				mesh = ObjMeshLoader.loadObj("test.obj", 0, 1f, vertexInfo, null);
+				mesh = ObjMeshLoader.loadObj("test.obj", 0, 1f, vertexInfo);
 				if(mesh==null)
 					throw new RuntimeException("Cannot load mesh");
 				meshActor = StaticMeshActor.make(mesh, shader, texture);

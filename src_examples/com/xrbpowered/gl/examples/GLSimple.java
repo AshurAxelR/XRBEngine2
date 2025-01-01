@@ -46,7 +46,7 @@ public class GLSimple extends Client {
 		//texture = new Texture(new Color(0xffddbb));
 
 		//mesh = FastMeshBuilder.cube(1f, StandardShader.standardVertexInfo, null);
-		mesh = ObjMeshLoader.loadObj("test.obj", 0, 1f, StandardShader.standardVertexInfo, null);
+		mesh = ObjMeshLoader.loadObj("test.obj", 0, 1f, StandardShader.standardVertexInfo);
 
 		meshActor = StaticMeshActor.make(mesh, shader, texture);
 		meshActor.position = new Vector3f(0, 0, -2);

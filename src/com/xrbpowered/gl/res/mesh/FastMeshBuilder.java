@@ -28,14 +28,14 @@ public class FastMeshBuilder extends MeshBuilder {
 	
 	private Vertex vertexRef = new Vertex();
 	
-	public FastMeshBuilder(VertexInfo info, Options options, int numVertices, int numIndices) {
-		super(info, options);
+	public FastMeshBuilder(VertexInfo info, int numVertices, int numIndices) {
+		super(info);
 		this.vertexData = info.createData(numVertices);
 		this.indexData = new short[numIndices];
 	}
 
-	public FastMeshBuilder(VertexInfo info, Options options, float[] vertexData, int numIndices) {
-		super(info, options);
+	public FastMeshBuilder(VertexInfo info, float[] vertexData, int numIndices) {
+		super(info);
 		this.vertexData = vertexData;
 		this.indexData = new short[numIndices];
 	}
@@ -85,11 +85,11 @@ public class FastMeshBuilder extends MeshBuilder {
 		return new StaticMesh(info, vertexData, indexData, verticesPerElement, false);
 	}
 
-	public static StaticMesh cube(float size, VertexInfo info, Options options) {
+	public static StaticMesh cube(float size, VertexInfo info) {
 		float d = size / 2f;
 		Vector3f norm = new Vector3f();
 		Vector3f tan = new Vector3f();
-		FastMeshBuilder mb = new FastMeshBuilder(info, options, 4 * 6, 6 * 6);
+		FastMeshBuilder mb = new FastMeshBuilder(info, 4 * 6, 6 * 6);
 		
 		norm.set(0, 0, -1);
 		tan.set(-1, 0, 0);
@@ -139,11 +139,11 @@ public class FastMeshBuilder extends MeshBuilder {
 		return mb.create();
 	}
 
-	public static StaticMesh plane(float size, int segm, int tileTex, VertexInfo info, Options options) {
+	public static StaticMesh plane(float size, int segm, int tileTex, VertexInfo info) {
 		int i, j;
 		float d = size / segm;
 		
-		FastMeshBuilder mb = new FastMeshBuilder(info, options, (segm+1) * (segm+1), segm * segm * 6);
+		FastMeshBuilder mb = new FastMeshBuilder(info, (segm+1) * (segm+1), segm * segm * 6);
 		
 		Vector3f v = new Vector3f();
 		int index = 0;
@@ -175,12 +175,12 @@ public class FastMeshBuilder extends MeshBuilder {
 		return mb.create();
 	}
 	
-	public static StaticMesh terrain(float size, float[][] hmap, int tileTex, VertexInfo info, Options options) {
+	public static StaticMesh terrain(float size, float[][] hmap, int tileTex, VertexInfo info) {
 		int i, j;
 		int segm = hmap.length - 1;
 		float d = size / segm;
 
-		FastMeshBuilder mb = new FastMeshBuilder(info, options, (segm+1) * (segm+1), segm * segm * 6);
+		FastMeshBuilder mb = new FastMeshBuilder(info, (segm+1) * (segm+1), segm * segm * 6);
 
 		Vector3f v = new Vector3f();
 		Vector3f n = new Vector3f();
@@ -237,7 +237,7 @@ public class FastMeshBuilder extends MeshBuilder {
 		return mb.create();
 	}
 	
-	public static StaticMesh sphere(float r, int segm, VertexInfo info, Options options) {
+	public static StaticMesh sphere(float r, int segm, VertexInfo info) {
 		int i, j;
 		
 		float[] sin = new float[segm*2+1];
@@ -249,7 +249,7 @@ public class FastMeshBuilder extends MeshBuilder {
 			cos[i] = (float) Math.cos(ai);
 		}
 		
-		FastMeshBuilder mb = new FastMeshBuilder(info, options, (segm+1) * (segm*2+1), segm * segm * 2 * 6);
+		FastMeshBuilder mb = new FastMeshBuilder(info, (segm+1) * (segm*2+1), segm * segm * 2 * 6);
 		
 		Vector3f v = new Vector3f();
 		int index = 0;
